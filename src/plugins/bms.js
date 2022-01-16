@@ -39,6 +39,14 @@ module.exports = fp(async function (fastify, opts) {
             let result = CHECK_TRIP.data.data
             let DATA = [];
             result.forEach(data => {
+                let vehicle_data = data.vehicle.split("|")
+                let vehicle = vehicle_data[0]
+
+                let depature_terminal_data = data.depature_terminal.split("|")
+                let depature_terminal = depature_terminal_data[0]
+
+                let destination_terminal_data = data.destination_terminal.split("|")
+                let destination_terminal = destination_terminal_data[0]
                 DATA.push({
                     "provider": {
                         "name": "BMS Agent",
@@ -58,9 +66,9 @@ module.exports = fp(async function (fastify, opts) {
                     "special_seats": [],
                     "special_seats_fare": "",
                     "order_id": "",
-                    "departure_terminal": data.departure_terminal,
-                    "destination_terminal": data.destination_terminal,
-                    "vehicle": substring(data.vehicle.trim(),0,-4),
+                    "departure_terminal": departure_terminal,
+                    "destination_terminal": destination_terminal,
+                    "vehicle": vehicle,
                     "boarding_at": "",
                     "departure_address": data.departure_address,
                     "destination_address": data.destination_address,
