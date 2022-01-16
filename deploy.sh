@@ -8,5 +8,3 @@ git commit -m "Updates"
 echo "PUSHING"
 git push origin main
 echo "PUSHED (^_^)"
-sleep(2)
-clear
