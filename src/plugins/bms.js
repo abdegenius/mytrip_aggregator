@@ -40,13 +40,13 @@ module.exports = fp(async function (fastify, opts) {
             let DATA = [];
             result.forEach(data => {
                 let vehicle_data = data.vehicle.split("|")
-                let vehicle = vehicle_data[0]
+                let vehicle = vehicle_data[0].trim()
 
                 let departure_terminal_data = data.departure_terminal.split("|")
-                let departure_terminal = departure_terminal_data[0]
+                let departure_terminal = departure_terminal_data[0].trim()
 
                 let destination_terminal_data = data.destination_terminal.split("|")
-                let destination_terminal = destination_terminal_data[0]
+                let destination_terminal = destination_terminal_data[0].trim()
                 DATA.push({
                     "provider": {
                         "name": "BMS Agent",
