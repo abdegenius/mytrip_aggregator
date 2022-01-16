@@ -124,7 +124,6 @@ module.exports = fp(async function (fastify, opts) {
             })
 
             const TRIPS = await Promise.all(promises)
-            return TRIPS
             if(Object.keys(TRIPS).length !== 0){
                 let DATA = [];
                 TRIPS.forEach(trip => {
