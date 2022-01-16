@@ -116,7 +116,7 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             } 
         })
-        
+        return GET_BOOKING.data
         if(GET_BOOKING.data){
             res = GET_BOOKING.data
                 return {
