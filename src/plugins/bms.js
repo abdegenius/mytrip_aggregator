@@ -12,6 +12,7 @@ module.exports = fp(async function (fastify, opts) {
             }
         })
         let states = BMS_STATES.data;
+        return states
         let departure_state = payload.departure_state
         let destination_state = payload.destination_state
         let trip_date = payload.trip_date
