@@ -1,5 +1,0 @@
-#!/bin/bash
-echo "Stopping"
-pm2 stop 0
-echo "Starting"
-pm2 start 0

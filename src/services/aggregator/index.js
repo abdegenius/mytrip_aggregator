@@ -14,9 +14,11 @@ module.exports = async function (fastify, opts) {
         }
         const abc_data = await fastify.ABCCheckTrips(payload);
         const guo_data = await fastify.GUOCheckTrips(payload);
+        const bms_data = await fastify.BMSCheckTrips(payload);
         reply.code(200).type('application/json').send({
           "GUO":(guo_data==undefined ? [] : guo_data),
-          "ABC":(abc_data==undefined ? [] : abc_data)
+          "ABC":(abc_data==undefined ? [] : abc_data),
+          "BMS":(bms_data==undefined ? [] : bms_data)
         })
     }
     catch(error){

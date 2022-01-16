@@ -1,5 +1,5 @@
 #!/bin/bash
 pm2 stop 0
-echo "Stopped x"
+echo "Stopped (-v-)"
 pm2 start 0
-echo "Started ( - - )"
+echo "Started (^_^)"
