@@ -2,19 +2,21 @@
 const moment = require('moment')
 const fp = require('fastify-plugin')
 const axios = require("axios")
+let api = `http://138.197.97.95/agents/api/v3/json/`
+let key = `M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY`
 module.exports = fp(async function (fastify, opts) {
   fastify.decorate('GUOCheckTrips', async function (payload) {
     try{
         //GET ALL ROUTE DETAILS
-        const ALL_ROUTE_DETAILS = await axios.get("http://138.197.97.95/agents/api/v3/json/AllRouteDetails", {
+        const ALL_ROUTE_DETAILS = await axios.get(api+"AllRouteDetails", {
             headers: {
-                'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                'Authorization': 'Bearer '+key,
                 'Content-Type': 'application/json'
             }
         })
-        const ALL_TERMINAL_STATES = await axios.get("http://138.197.97.95/agents/api/v3/json/TerminalsWithState", {
+        const ALL_TERMINAL_STATES = await axios.get(api+"TerminalsWithState", {
             headers: {
-                'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                'Authorization': 'Bearer '+key,
                 'Content-Type': 'application/json'
             }
         })
@@ -38,14 +40,6 @@ module.exports = fp(async function (fastify, opts) {
         let DEPARTURE_STATE = payload.departure_state.toUpperCase().trim();
         // DESTINATION STATE NAME from PAYLOAD turned uppercased and trimmed
         let DESTINATION_STATE = payload.destination_state.toUpperCase().trim(); 
-        // DEPARTURE STATE ID INITIALIZED
-        let DEPARTURE_STATE_ID;
-        // DESTINATION STATE ID INITIALIZED
-        let DESTINATION_STATE_ID;
-        // DEPARTURE LOADINID
-        let DEPARTURE_LOADINID = [];
-        // DESTINATION DESTINATION ID
-        let DESTINATION_DESTINATIONID = [];
 	
         // LOOPING THROUGH ALL STATES TO CHECK IF DEPARTURE AND DESTINATION STATE EXIST
         STATES.find(state => {
@@ -66,6 +60,14 @@ module.exports = fp(async function (fastify, opts) {
         })
         // IF state_confirmation = 2 states verification passed
         if(state_confirmation == 2){
+            // DEPARTURE STATE ID INITIALIZED
+            let DEPARTURE_STATE_ID;
+            // DESTINATION STATE ID INITIALIZED
+            let DESTINATION_STATE_ID;
+            // DEPARTURE LOADINID
+            let DEPARTURE_LOADINID = [];
+            // DESTINATION DESTINATION ID
+            let DESTINATION_DESTINATIONID = [];
             // IF DEPARTURE_STATE_ID exist
             if(DEPARTURE_STATE_ID){
                 // LOOPING THROUGH TERMINALS AVAILABLE FOR BOOKING ONLINE
@@ -90,6 +92,105 @@ module.exports = fp(async function (fastify, opts) {
                     }
                 });
             }   
+
+            let DEPARTURE_TO_DESTINATIONS = [];
+            DEPARTURE_LOADINID.forEach(LoadinID => {
+                DESTINATION_DESTINATIONID.forEach(async (DestinationID) => {
+                    ROUTES.some(route => {
+                        if(route.LoadinID == LoadinID && route.DestinationID == DestinationID){
+                            DEPARTURE_TO_DESTINATIONS.push(route)
+                        }
+                    })
+                })
+            });
+            
+            const promises = DEPARTURE_TO_DESTINATIONS.map(async trip => {
+                const response = await axios({
+                    method: 'GET',
+                    url: api+`AvaiableBusWithSeatPrice?LoadinID=${trip.LoadinID}&DestinationID=${trip.DestinationID}&TripDate=${payload.trip_date}`,
+                    headers: {
+                        'Authorization': 'Bearer '+key,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                
+                let data = response.data.data
+                data.loadin_id = trip.LoadinID
+                data.destination_id = trip.DestinationID
+                return {
+                    data: data
+                }
+            
+            })
+
+            const TRIPS = await Promise.all(promises)
+            if(Object.keys(TRIPS).length !== 0){
+                let DATA = [];
+                TRIPS.forEach(trip => {
+            trip.data.BusList.forEach(trip_data => {
+                        let available_seats = trip_data.AvailableSeat.length > 0 ? trip_data.AvailableSeat : []
+                        let blocked_seats = trip_data.BlockedSeat.length > 0 ? trip_data.BlockedSeat : []
+                let bookable_seats = []
+                if(available_seats.length > 0 && blocked_seats.length > 0){
+                bookable_seats = available_seats.filter(val => !blocked_seats.includes(val));
+                }
+                        let total_seats = 0
+                        let vehicle_name = trip_data.VehicleGroupTag_Name.trim().toLowerCase()
+                        if(vehicle_name == 'sienna'){ total_seats = 7 }
+                        if(vehicle_name == 'hiace'){ total_seats = 15 }
+                        if(vehicle_name == 'smart coach'){ total_seats = 33 }
+                        if(vehicle_name == 'luxury'){ total_seats = 59 }
+                    
+                        let departure_terminal_data = TERMINAL_STATES.data.filter(t => {
+                return t.TerminalID == trip.data.loadin_id
+                        });
+                    
+
+                    DATA.push({
+                        "provider": {
+                            "name": "GUO Transport",
+                            "short_name": "GUO"
+                        },
+                        "trip_id": Number(trip_data.TripID),
+                        "trip_no": Number(trip_data.TripNo),
+                        "trip_date": payload.trip_date,
+                        "departure_time": moment(trip_data.Departure_Time).format("DD/MM/YYYY HH:MM"),
+                        "origin_id": "",
+                        "destination_id": Number(trip_data.DestinationID),
+                        "narration": trip_data.Loading_Office +" - "+ trip_data.Destination,
+                        "fare": Number(trip_data.FareAmount),
+                        "total_seats": total_seats,
+                        "available_seats": bookable_seats,
+                        "blocked_seats": blocked_seats,
+                        "special_seats": (trip_data.SpecialSeatPricing.length) > 0 ? trip_data.SpecialSeatPricing[0].Seats : [],
+                        "special_seats_fare": (trip_data.SpecialSeatPricing.length) > 0 ? Number(trip_data.SpecialSeatPricing[0].FareAmount) : "",
+                        "order_id": trip.data.RefCode,
+                        "departure_terminal": trip_data.Loading_Office.toUpperCase(),
+                        "destination_terminal": trip_data.Destination.toUpperCase(),
+                        "vehicle": trip_data.VehicleGroupTag_Name +" - "+trip_data.VIN,
+                        "boarding_at": "",
+                        "departure_address": departure_terminal_data[0] ? departure_terminal_data[0].TerminalAddress : "",
+                        "destination_address": trip_data.Destination + " Terminal",
+                    });
+            });
+                })
+                
+            
+                return {
+                    error: false,
+                    message: "successful",
+                    info: "Data Available",
+                    data: DATA
+                }
+            }
+            else{
+                return {
+                    error: true,
+                    message: "failed",
+                    info: "No trips found",
+                    data: []
+                };
+            }
         }
         // if state confirmation != 2 states verification failed
         else{
@@ -97,108 +198,6 @@ module.exports = fp(async function (fastify, opts) {
                 error: true,
                 message: "failed",
                 info: "Terminals does not exist between states",
-                data: []
-            };
-        }
-        let DEPARTURE_TO_DESTINATIONS = [];
-        DEPARTURE_LOADINID.forEach(LoadinID => {
-            DESTINATION_DESTINATIONID.forEach(async (DestinationID) => {
-                ROUTES.some(route => {
-                    if(route.LoadinID == LoadinID && route.DestinationID == DestinationID){
-                        DEPARTURE_TO_DESTINATIONS.push(route)
-                    }
-                })
-            })
-        });
-
-        
-
-        
-        const promises = DEPARTURE_TO_DESTINATIONS.map(async trip => {
-            const response = await axios({
-                method: 'GET',
-                url: `http://138.197.97.95/agents/api/v3/json/AvaiableBusWithSeatPrice?LoadinID=${trip.LoadinID}&DestinationID=${trip.DestinationID}&TripDate=${payload.trip_date}`,
-                headers: {
-                    'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
-                    'Content-Type': 'application/json'
-                }
-            })
-            
-            let data = response.data.data
-            data.loadin_id = trip.LoadinID
-            data.destination_id = trip.DestinationID
-            return {
-                data: data
-            }
-           
-        })
-
-
-        const TRIPS = await Promise.all(promises)
-        if(Object.keys(TRIPS).length !== 0){
-            let DATA = [];
-            TRIPS.forEach(trip => {
-		trip.data.BusList.forEach(trip_data => {
-                    let available_seats = trip_data.AvailableSeat.length > 0 ? trip_data.AvailableSeat : []
-                    let blocked_seats = trip_data.BlockedSeat.length > 0 ? trip_data.BlockedSeat : []
-		    let bookable_seats = []
-		    if(available_seats.length > 0 && blocked_seats.length > 0){
-			bookable_seats = available_seats.filter(val => !blocked_seats.includes(val));
-		    }
-                    let total_seats = 0
-                    let vehicle_name = trip_data.VehicleGroupTag_Name.trim().toLowerCase()
-                    if(vehicle_name == 'sienna'){ total_seats = 7 }
-                    if(vehicle_name == 'hiace'){ total_seats = 15 }
-                    if(vehicle_name == 'smart coach'){ total_seats = 33 }
-                    if(vehicle_name == 'luxury'){ total_seats = 59 }
-                
-                    let departure_terminal_data = TERMINAL_STATES.data.filter(t => {
-			return t.TerminalID == trip.data.loadin_id
-                    });
-                
-
-                DATA.push({
-                    "provider": {
-                        "name": "GUO Transport",
-                        "short_name": "GUO"
-                    },
-                    "trip_id": Number(trip_data.TripID),
-                    "trip_no": Number(trip_data.TripNo),
-                    "trip_date": payload.trip_date,
-                    "departure_time": moment(trip_data.Departure_Time).format("DD/MM/YYYY HH:MM"),
-                    "origin_id": "",
-                    "destination_id": Number(trip_data.DestinationID),
-                    "narration": trip_data.Loading_Office +" - "+ trip_data.Destination,
-                    "fare": Number(trip_data.FareAmount),
-                    "total_seats": total_seats,
-                    "available_seats": bookable_seats,
-                    "blocked_seats": blocked_seats,
-                    "special_seats": (trip_data.SpecialSeatPricing.length) > 0 ? trip_data.SpecialSeatPricing[0].Seats : [],
-                    "special_seats_fare": (trip_data.SpecialSeatPricing.length) > 0 ? Number(trip_data.SpecialSeatPricing[0].FareAmount) : "",
-                    "order_id": trip.data.RefCode,
-                    "departure_terminal": trip_data.Loading_Office.toUpperCase(),
-                    "destination_terminal": trip_data.Destination.toUpperCase(),
-                    "vehicle": trip_data.VehicleGroupTag_Name +" - "+trip_data.VIN,
-                    "boarding_at": "",
-                    "departure_address": departure_terminal_data[0] ? departure_terminal_data[0].TerminalAddress : "",
-                    "destination_address": trip_data.Destination + " Terminal",
-                });
-		});
-            })
-            
-           
-            return {
-                error: false,
-                message: "successful",
-                info: "Data Available",
-                data: DATA
-            }
-        }
-        else{
-            return {
-                error: true,
-                message: "failed",
-                info: "No trips found",
                 data: []
             };
         }
@@ -237,7 +236,7 @@ module.exports = fp(async function (fastify, opts) {
         })
         try{
             //GET BOOKING
-            const BOOKING = await axios.post("http://138.197.97.95/agents/api/v3/json/SaveBookingOrder",
+            const BOOKING = await axios.post(api+"SaveBookingOrder",
             {
                 TripID: payload.trip_id,
                 SelectedSeats: payload.seat_numbers,
@@ -258,7 +257,7 @@ module.exports = fp(async function (fastify, opts) {
             },
             {
                 headers: {
-                    'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                    'Authorization': 'Bearer '+key,
                     'Content-Type': 'application/json'
                 }
             })
@@ -268,7 +267,7 @@ module.exports = fp(async function (fastify, opts) {
                 let dep_ter = nar[0]
                 let des_ter = nar[2] + ((nar[4]) ? " - "+nar[4] : "")
                 //FINALIZE BOOKING
-                const FINALIZE_BOOKING = await axios.post("http://138.197.97.95/agents/api/v3/json/ConfirmBooking",
+                const FINALIZE_BOOKING = await axios.post(api+"ConfirmBooking",
                 {
                     OrderID: payload.order_id,
                     PaymentRefCode: response.ordernumber,
@@ -276,7 +275,7 @@ module.exports = fp(async function (fastify, opts) {
                 },
                 {
                     headers: {
-                        'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                        'Authorization': 'Bearer '+key,
                         'Content-Type': 'application/json'
                     }
                 })
@@ -354,7 +353,7 @@ module.exports = fp(async function (fastify, opts) {
         let url = payload.type == "lock" ? "ActivateLockSeat" : "deleteLockOnlineSeatBySeat";
 
         //GET LOCK STATUS
-        const LOCK_STATUS = await axios.post("http://138.197.97.95/agents/api/v3/json/"+url,
+        const LOCK_STATUS = await axios.post(api+url,
         {
             TripID: payload.trip_id,
             SelectedSeats: payload.seat_number,
@@ -363,7 +362,7 @@ module.exports = fp(async function (fastify, opts) {
         },
         {
             headers: {
-                'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                'Authorization': 'Bearer '+key,
                 //'Content-Type': 'application/json'
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
