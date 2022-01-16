@@ -28,7 +28,6 @@ module.exports = fp(async function (fastify, opts) {
         const TERMINALS = ALL_ROUTE_DETAILS.data.data.Terminals;
         // LIST OF DESTINATIONS
         const DESTINATIONS = ALL_ROUTE_DETAILS.data.data.Destinations;
-        return DESTINATIONS
         // LIST OF ROUTES
         const ROUTES = ALL_ROUTE_DETAILS.data.data.Routes;
         // state_confirmation: need 2 to proceed else states doesnt have route
@@ -95,6 +94,7 @@ module.exports = fp(async function (fastify, opts) {
             }   
 
             let DEPARTURE_TO_DESTINATIONS = [];
+            return DEPARTURE_LOADINID
             DEPARTURE_LOADINID.forEach(LoadinID => {
                 DESTINATION_DESTINATIONID.forEach(async (DestinationID) => {
                     ROUTES.some(route => {
