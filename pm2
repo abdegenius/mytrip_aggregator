@@ -1,0 +1,5 @@
+#!/bin/bash
+pm2 stop 0
+echo "Stopped x"
+pm2 start 0
+echo "Started ( - - )"
