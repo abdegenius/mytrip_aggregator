@@ -43,7 +43,7 @@ module.exports = fp(async function (fastify, opts) {
                 let vehicle = vehicle_data[0]
 
                 let depature_terminal_data = data.depature_terminal.split("|")
-                let depature_terminal = depature_terminal_data[0]
+                let departure_terminal = depature_terminal_data[0]
 
                 let destination_terminal_data = data.destination_terminal.split("|")
                 let destination_terminal = destination_terminal_data[0]
