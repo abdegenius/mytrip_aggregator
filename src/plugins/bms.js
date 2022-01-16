@@ -60,7 +60,7 @@ module.exports = fp(async function (fastify, opts) {
                     "order_id": "",
                     "departure_terminal": data.departure_terminal,
                     "destination_terminal": data.destination_terminal,
-                    "vehicle": data.vehicle,
+                    "vehicle": substring(data.vehicle.trim(),0,-4),
                     "boarding_at": "",
                     "departure_address": data.departure_address,
                     "destination_address": data.destination_address,
