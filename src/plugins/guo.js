@@ -40,6 +40,10 @@ module.exports = fp(async function (fastify, opts) {
         let DEPARTURE_STATE = payload.departure_state.toUpperCase().trim();
         // DESTINATION STATE NAME from PAYLOAD turned uppercased and trimmed
         let DESTINATION_STATE = payload.destination_state.toUpperCase().trim(); 
+        // DEPARTURE STATE ID INITIALIZED
+        let DEPARTURE_STATE_ID;
+        // DESTINATION STATE ID INITIALIZED
+        let DESTINATION_STATE_ID;
 	
         // LOOPING THROUGH ALL STATES TO CHECK IF DEPARTURE AND DESTINATION STATE EXIST
         STATES.find(state => {
@@ -60,10 +64,6 @@ module.exports = fp(async function (fastify, opts) {
         })
         // IF state_confirmation = 2 states verification passed
         if(state_confirmation == 2){
-            // DEPARTURE STATE ID INITIALIZED
-            let DEPARTURE_STATE_ID;
-            // DESTINATION STATE ID INITIALIZED
-            let DESTINATION_STATE_ID;
             // DEPARTURE LOADINID
             let DEPARTURE_LOADINID = [];
             // DESTINATION DESTINATION ID
