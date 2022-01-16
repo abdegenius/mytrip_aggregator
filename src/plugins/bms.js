@@ -15,7 +15,8 @@ module.exports = fp(async function (fastify, opts) {
         let destination_state = payload.destination_state
         let trip_date = payload.trip_date
         let state_confirmation = 0
-        BMS_STATES.data.data.filter(row => {
+        let states = BMS_STATES
+        states.data.data.find(row => {
             if(row.name == departure_state){
                 state_confirmation += 1;
             }
@@ -58,7 +59,7 @@ module.exports = fp(async function (fastify, opts) {
             error: true,
             message: "failed",
             info: error.message,
-            data: []
+            data: ["f"]
         };
     }
   })
