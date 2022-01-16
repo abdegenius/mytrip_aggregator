@@ -11,12 +11,11 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             }
         })
-        let states = BMS_STATES.data;
         let departure_state = payload.departure_state
         let destination_state = payload.destination_state
         let trip_date = payload.trip_date
         let state_confirmation = 0
-        states.find(row => {
+        BMS_STATES.data.filter(row => {
             if(row.name == departure_state){
                 state_confirmation += 1;
             }
