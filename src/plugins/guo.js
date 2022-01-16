@@ -127,7 +127,7 @@ module.exports = fp(async function (fastify, opts) {
             if(Object.keys(TRIPS).length !== 0){
                 let DATA = [];
                 TRIPS.forEach(trip => {
-                    if(trip.data.BusList){
+                    if(trip.data){
                         trip.data.BusList.forEach(trip_data => {
                             let available_seats = trip_data.AvailableSeat.length > 0 ? trip_data.AvailableSeat : []
                             let blocked_seats = trip_data.BlockedSeat.length > 0 ? trip_data.BlockedSeat : []
