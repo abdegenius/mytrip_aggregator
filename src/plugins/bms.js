@@ -24,6 +24,7 @@ module.exports = fp(async function (fastify, opts) {
                 state_confirmation += 1;
             }
         })
+        return state_confirmation
         if(state_confirmation == 2){
             const CHECK_TRIP = await axios.get(api+`check_trip`,
             {
@@ -59,7 +60,7 @@ module.exports = fp(async function (fastify, opts) {
             error: true,
             message: "failed",
             info: error.message,
-            data: ["f"]
+            data: []
         };
     }
   })
