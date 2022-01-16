@@ -59,6 +59,9 @@ module.exports = async function (fastify, opts) {
         if(provider.toUpperCase() === "GUO"){
           book_trip = await fastify.GUOBookTrip(payload)
         }
+        if(provider.toUpperCase() === "BMS"){
+          book_trip = await fastify.BMSBookTrip(payload)
+        }
         reply.code(200).type('application/json').send(book_trip)
     }
     catch(error){

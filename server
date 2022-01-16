@@ -1,5 +1,0 @@
-#!/bin/bash
-pm2 stop 0
-echo "Stopping Node"
-pm2 start 0
-echo "Starting node"
