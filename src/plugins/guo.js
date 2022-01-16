@@ -26,9 +26,9 @@ module.exports = fp(async function (fastify, opts) {
         const STATES = ALL_ROUTE_DETAILS.data.data.States;
         // LIST OF TERMINALS
         const TERMINALS = ALL_ROUTE_DETAILS.data.data.Terminals;
-        return TERMINALS
         // LIST OF DESTINATIONS
         const DESTINATIONS = ALL_ROUTE_DETAILS.data.data.Destinations;
+        return DESTINATIONS
         // LIST OF ROUTES
         const ROUTES = ALL_ROUTE_DETAILS.data.data.Routes;
         // state_confirmation: need 2 to proceed else states doesnt have route
