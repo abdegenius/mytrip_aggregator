@@ -24,8 +24,7 @@ module.exports = fp(async function (fastify, opts) {
                 state_confirmation += 1;
             }
         })
-        return state_confirmation
-        if(state_confirmation == 2){
+        if(parseInt(state_confirmation) == 2){
             const CHECK_TRIP = await axios.get(api+`check_trip`,
             {
                 "departure_state": departure_state,
@@ -37,6 +36,7 @@ module.exports = fp(async function (fastify, opts) {
                     'Content-Type': 'application/json'
                 }
             })
+            return CHECK_TRIP.data
             let result = CHECK_TRIP.data
             return {
                 error: false,
