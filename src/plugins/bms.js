@@ -12,7 +12,7 @@ module.exports = fp(async function (fastify, opts) {
         let trip_date = payload.trip_date
         let state_confirmation = 0
         let states = await BMS_STATES()
-        return states.data
+        return states
         BMS_STATES().data.filter(row => {
             if(row.name == departure_state){
                 state_confirmation += 1;
