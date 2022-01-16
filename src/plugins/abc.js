@@ -2,6 +2,8 @@
 const moment = require('moment')
 const fp = require('fastify-plugin')
 const axios = require("axios")
+let api = `http://gds.ticketsimply.africa/gds/api/`
+let key = `TSXTYSAPI42231874`
 module.exports = fp(async function (fastify, opts) {
   fastify.decorate('ABCCheckTrips', async function (payload) {
     try{
@@ -135,9 +137,9 @@ module.exports = fp(async function (fastify, opts) {
 
         if(destination_state_terminals.length > 0 && departure_state_terminals.length > 0){
 
-            const GET_CITIES = await axios.get(`http://gds.ticketsimply.africa/gds/api/cities.json`, {
+            const GET_CITIES = await axios.get(api+`cities.json`, {
                 headers: {
-                    'api_key': 'TSXTYSAPI42231874',
+                    'api_key': key,
                     'Content-Type': 'application/json'
                 }
             })
@@ -158,9 +160,9 @@ module.exports = fp(async function (fastify, opts) {
             })
             
             if(DEPARTURE_STATE.length > 0 && DESTINATION_STATE.length > 0){
-                const GET_CITY_PAIRS = await axios.get(`http://gds.ticketsimply.africa/gds/api/city_pairs.json`, {
+                const GET_CITY_PAIRS = await axios.get(api+`city_pairs.json`, {
                     headers: {
-                        'api_key': 'TSXTYSAPI42231874',
+                        'api_key': key,
                         'Content-Type': 'application/json'
                     }
                 })
@@ -187,9 +189,9 @@ module.exports = fp(async function (fastify, opts) {
                     const promises = ROUTES.map(async route => {
                         const response = await axios({
                         method: 'GET',
-                        url: `http://gds.ticketsimply.africa/gds/api/availabilities/${route.departure_state_id}/${route.destination_state_id}/${payload.trip_date}.json`,
+                        url: api+`availabilities/${route.departure_state_id}/${route.destination_state_id}/${payload.trip_date}.json`,
                         headers: {
-                            'api_key': 'TSXTYSAPI42231874',
+                            'api_key': key,
                             'Content-Type': 'application/json'
                         }
                         })
@@ -213,9 +215,9 @@ module.exports = fp(async function (fastify, opts) {
                         TRIP_DATA.forEach(async(trip) => {
                             const schedule_data = await axios({
                                 method: 'GET',
-                                url: `http://gds.ticketsimply.africa/gds/api/ui_schedule/${trip[1]}.json`,
+                                url: api+`ui_schedule/${trip[1]}.json`,
                                     headers: {
-                                        'api_key': 'TSXTYSAPI42231874',
+                                        'api_key': key,
                                         'Content-Type': 'application/json'
                                     }
                             })
@@ -359,7 +361,7 @@ module.exports = fp(async function (fastify, opts) {
         }
     })
     try{
-        const GET_BOOKING = await axios.post(`http://gds.ticketsimply.africa/gds/api/tentative_booking/${trip_id}.json?api_key=TSXTYSAPI42231874`, 
+        const GET_BOOKING = await axios.post(api+`tentative_booking/${trip_id}.json?api_key=`+key, 
         {
             "book_ticket": {
                 "seat_details": {
@@ -380,16 +382,16 @@ module.exports = fp(async function (fastify, opts) {
         },
         {
             headers: {
-                'api_key': 'TSXTYSAPI42231874',
+                'api_key': key,
                 'Content-Type': 'application/json'
             } 
         })
         
         if(GET_BOOKING.data.result){
             const result = GET_BOOKING.data.result.ticket_details
-            const COMPLETE_BOOKING = await axios.post(`http://gds.ticketsimply.africa/gds/api/confirm_booking/${result.pnr_number}.json?api_key=TSXTYSAPI42231874`, {
+            const COMPLETE_BOOKING = await axios.post(api+`confirm_booking/${result.pnr_number}.json?api_key=`+key, {
                 headers: {
-                    'api_key': 'TSXTYSAPI42231874',
+                    'api_key': key,
                     'Content-Type': 'application/json'
                 } 
             })

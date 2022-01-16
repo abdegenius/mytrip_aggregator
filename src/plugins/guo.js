@@ -2,19 +2,21 @@
 const moment = require('moment')
 const fp = require('fastify-plugin')
 const axios = require("axios")
+let api = `http://138.197.97.95/agents/api/v3/json/`
+let key = `M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY`
 module.exports = fp(async function (fastify, opts) {
   fastify.decorate('GUOCheckTrips', async function (payload) {
     try{
         //GET ALL ROUTE DETAILS
-        const ALL_ROUTE_DETAILS = await axios.get("http://138.197.97.95/agents/api/v3/json/AllRouteDetails", {
+        const ALL_ROUTE_DETAILS = await axios.get(api+"AllRouteDetails", {
             headers: {
-                'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                'Authorization': 'Bearer '+key,
                 'Content-Type': 'application/json'
             }
         })
-        const ALL_TERMINAL_STATES = await axios.get("http://138.197.97.95/agents/api/v3/json/TerminalsWithState", {
+        const ALL_TERMINAL_STATES = await axios.get(api+"TerminalsWithState", {
             headers: {
-                'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                'Authorization': 'Bearer '+key,
                 'Content-Type': 'application/json'
             }
         })
@@ -117,9 +119,9 @@ module.exports = fp(async function (fastify, opts) {
         const promises = DEPARTURE_TO_DESTINATIONS.map(async trip => {
             const response = await axios({
                 method: 'GET',
-                url: `http://138.197.97.95/agents/api/v3/json/AvaiableBusWithSeatPrice?LoadinID=${trip.LoadinID}&DestinationID=${trip.DestinationID}&TripDate=${payload.trip_date}`,
+                url: api+`AvaiableBusWithSeatPrice?LoadinID=${trip.LoadinID}&DestinationID=${trip.DestinationID}&TripDate=${payload.trip_date}`,
                 headers: {
-                    'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                    'Authorization': 'Bearer '+key,
                     'Content-Type': 'application/json'
                 }
             })
@@ -237,7 +239,7 @@ module.exports = fp(async function (fastify, opts) {
         })
         try{
             //GET BOOKING
-            const BOOKING = await axios.post("http://138.197.97.95/agents/api/v3/json/SaveBookingOrder",
+            const BOOKING = await axios.post(api+"SaveBookingOrder",
             {
                 TripID: payload.trip_id,
                 SelectedSeats: payload.seat_numbers,
@@ -258,7 +260,7 @@ module.exports = fp(async function (fastify, opts) {
             },
             {
                 headers: {
-                    'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                    'Authorization': 'Bearer '+key,
                     'Content-Type': 'application/json'
                 }
             })
@@ -268,7 +270,7 @@ module.exports = fp(async function (fastify, opts) {
                 let dep_ter = nar[0]
                 let des_ter = nar[2] + ((nar[4]) ? " - "+nar[4] : "")
                 //FINALIZE BOOKING
-                const FINALIZE_BOOKING = await axios.post("http://138.197.97.95/agents/api/v3/json/ConfirmBooking",
+                const FINALIZE_BOOKING = await axios.post(api+"ConfirmBooking",
                 {
                     OrderID: payload.order_id,
                     PaymentRefCode: response.ordernumber,
@@ -276,7 +278,7 @@ module.exports = fp(async function (fastify, opts) {
                 },
                 {
                     headers: {
-                        'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                        'Authorization': 'Bearer '+key,
                         'Content-Type': 'application/json'
                     }
                 })
@@ -354,7 +356,7 @@ module.exports = fp(async function (fastify, opts) {
         let url = payload.type == "lock" ? "ActivateLockSeat" : "deleteLockOnlineSeatBySeat";
 
         //GET LOCK STATUS
-        const LOCK_STATUS = await axios.post("http://138.197.97.95/agents/api/v3/json/"+url,
+        const LOCK_STATUS = await axios.post(api+url,
         {
             TripID: payload.trip_id,
             SelectedSeats: payload.seat_number,
@@ -363,7 +365,7 @@ module.exports = fp(async function (fastify, opts) {
         },
         {
             headers: {
-                'Authorization': 'Bearer M6KpwwDlc0OyEGLABHkx4bO_yz77OIaTSHE2bbQFKwY',
+                'Authorization': 'Bearer '+key,
                 //'Content-Type': 'application/json'
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
