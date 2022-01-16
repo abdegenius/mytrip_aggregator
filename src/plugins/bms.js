@@ -25,7 +25,7 @@ module.exports = fp(async function (fastify, opts) {
             }
         })
         if(parseInt(state_confirmation) == 2){
-            const CHECK_TRIP = await axios.get(api+`check_trip`,
+            const CHECK_TRIP = await axios.post(api+`check_trip`,
             {
                 "departure_state": departure_state,
                 "destination_state": destination_state,
