@@ -94,7 +94,6 @@ module.exports = fp(async function (fastify, opts) {
             }   
 
             let DEPARTURE_TO_DESTINATIONS = [];
-            return DEPARTURE_LOADINID
             DEPARTURE_LOADINID.forEach(LoadinID => {
                 DESTINATION_DESTINATIONID.forEach(async (DestinationID) => {
                     ROUTES.some(route => {
@@ -125,16 +124,17 @@ module.exports = fp(async function (fastify, opts) {
             })
 
             const TRIPS = await Promise.all(promises)
+            return TRIPS
             if(Object.keys(TRIPS).length !== 0){
                 let DATA = [];
                 TRIPS.forEach(trip => {
-            trip.data.BusList.forEach(trip_data => {
+                    trip.data.BusList.forEach(trip_data => {
                         let available_seats = trip_data.AvailableSeat.length > 0 ? trip_data.AvailableSeat : []
                         let blocked_seats = trip_data.BlockedSeat.length > 0 ? trip_data.BlockedSeat : []
-                let bookable_seats = []
-                if(available_seats.length > 0 && blocked_seats.length > 0){
-                bookable_seats = available_seats.filter(val => !blocked_seats.includes(val));
-                }
+                        let bookable_seats = []
+                        if(available_seats.length > 0 && blocked_seats.length > 0){
+                            bookable_seats = available_seats.filter(val => !blocked_seats.includes(val));
+                        }
                         let total_seats = 0
                         let vehicle_name = trip_data.VehicleGroupTag_Name.trim().toLowerCase()
                         if(vehicle_name == 'sienna'){ total_seats = 7 }
@@ -143,39 +143,37 @@ module.exports = fp(async function (fastify, opts) {
                         if(vehicle_name == 'luxury'){ total_seats = 59 }
                     
                         let departure_terminal_data = TERMINAL_STATES.data.filter(t => {
-                return t.TerminalID == trip.data.loadin_id
+                            return t.TerminalID == trip.data.loadin_id
                         });
-                    
-
-                    DATA.push({
-                        "provider": {
-                            "name": "GUO Transport",
-                            "short_name": "GUO"
-                        },
-                        "trip_id": Number(trip_data.TripID),
-                        "trip_no": Number(trip_data.TripNo),
-                        "trip_date": payload.trip_date,
-                        "departure_time": moment(trip_data.Departure_Time).format("DD/MM/YYYY HH:MM"),
-                        "origin_id": "",
-                        "destination_id": Number(trip_data.DestinationID),
-                        "narration": trip_data.Loading_Office +" - "+ trip_data.Destination,
-                        "fare": Number(trip_data.FareAmount),
-                        "total_seats": total_seats,
-                        "available_seats": bookable_seats,
-                        "blocked_seats": blocked_seats,
-                        "special_seats": (trip_data.SpecialSeatPricing.length) > 0 ? trip_data.SpecialSeatPricing[0].Seats : [],
-                        "special_seats_fare": (trip_data.SpecialSeatPricing.length) > 0 ? Number(trip_data.SpecialSeatPricing[0].FareAmount) : "",
-                        "order_id": trip.data.RefCode,
-                        "departure_terminal": trip_data.Loading_Office.toUpperCase(),
-                        "destination_terminal": trip_data.Destination.toUpperCase(),
-                        "vehicle": trip_data.VehicleGroupTag_Name +" - "+trip_data.VIN,
-                        "boarding_at": "",
-                        "departure_address": departure_terminal_data[0] ? departure_terminal_data[0].TerminalAddress : "",
-                        "destination_address": trip_data.Destination + " Terminal",
+                        
+                        DATA.push({
+                            "provider": {
+                                "name": "GUO Transport",
+                                "short_name": "GUO"
+                            },
+                            "trip_id": Number(trip_data.TripID),
+                            "trip_no": Number(trip_data.TripNo),
+                            "trip_date": payload.trip_date,
+                            "departure_time": moment(trip_data.Departure_Time).format("DD/MM/YYYY HH:MM"),
+                            "origin_id": "",
+                            "destination_id": Number(trip_data.DestinationID),
+                            "narration": trip_data.Loading_Office +" - "+ trip_data.Destination,
+                            "fare": Number(trip_data.FareAmount),
+                            "total_seats": total_seats,
+                            "available_seats": bookable_seats,
+                            "blocked_seats": blocked_seats,
+                            "special_seats": (trip_data.SpecialSeatPricing.length) > 0 ? trip_data.SpecialSeatPricing[0].Seats : [],
+                            "special_seats_fare": (trip_data.SpecialSeatPricing.length) > 0 ? Number(trip_data.SpecialSeatPricing[0].FareAmount) : "",
+                            "order_id": trip.data.RefCode,
+                            "departure_terminal": trip_data.Loading_Office.toUpperCase(),
+                            "destination_terminal": trip_data.Destination.toUpperCase(),
+                            "vehicle": trip_data.VehicleGroupTag_Name +" - "+trip_data.VIN,
+                            "boarding_at": "",
+                            "departure_address": departure_terminal_data[0] ? departure_terminal_data[0].TerminalAddress : "",
+                            "destination_address": trip_data.Destination + " Terminal",
+                        });
                     });
-            });
                 })
-                
             
                 return {
                     error: false,
