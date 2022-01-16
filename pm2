@@ -1,4 +1,5 @@
 #!/bin/bash
+git pull
 pm2 stop 0
 echo "Stopped (-v-)"
 pm2 start 0
