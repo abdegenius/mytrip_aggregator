@@ -36,7 +36,7 @@ module.exports = fp(async function (fastify, opts) {
                     'Content-Type': 'application/json'
                 }
             })
-            let result = CHECK_TRIP.data
+            let result = CHECK_TRIP.data.data
             let DATA = [];
             result.forEach(data => {
                 DATA.push({
