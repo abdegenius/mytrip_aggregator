@@ -6,16 +6,12 @@ let api = `https://bmsapi.mytrip.ng/api/v1/`
 module.exports = fp(async function (fastify, opts) {
   fastify.decorate('BMSCheckTrips', async function (payload) {
     try{
-        const BMS_STATES = await axios.get(api+`states`, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        const BMS_STATES = (async () => { await axios.get(api+`states`) })
         let departure_state = payload.departure_state
         let destination_state = payload.destination_state
         let trip_date = payload.trip_date
         let state_confirmation = 0
-        BMS_STATES.data.filter(row => {
+        BMS_STATES().data.filter(row => {
             if(row.name == departure_state){
                 state_confirmation += 1;
             }
