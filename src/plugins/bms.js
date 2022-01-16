@@ -36,13 +36,41 @@ module.exports = fp(async function (fastify, opts) {
                     'Content-Type': 'application/json'
                 }
             })
-            return CHECK_TRIP.data
             let result = CHECK_TRIP.data
+            let DATA = [];
+            result.forEach(data => {
+                DATA.push({
+                    "provider": {
+                        "name": "BMS Agent",
+                        "short_name": "BMS"
+                    },
+                    "trip_id": Number(data.schedule_id),
+                    "trip_no": "",
+                    "trip_date": payload.trip_date,
+                    "departure_time": data.departure_time,
+                    "origin_id": "",
+                    "destination_id": "",
+                    "narration": data.departure_address +" - "+ data.destination_address,
+                    "fare": Number(data.fare),
+                    "total_seats": data.total_seats,
+                    "available_seats": Object.values(data.available_seats),
+                    "blocked_seats": Object.values(data.blocked_seats),
+                    "special_seats": [],
+                    "special_seats_fare": "",
+                    "order_id": "",
+                    "departure_terminal": data.departure_terminal,
+                    "destination_terminal": data.destination_terminal,
+                    "vehicle": data.vehicle,
+                    "boarding_at": "",
+                    "departure_address": data.departure_address,
+                    "destination_address": data.destination_address,
+                });
+            });
             return {
                 error: false,
                 message: "successful",
                 info: "Data fetched successfully",
-                data: result
+                data: DATA
             };
         }
 
