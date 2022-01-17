@@ -114,8 +114,8 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             } 
         })
-        if(PREBOOKING.data){
-            res = PREBOOKING.data
+            res = PREBOOKING.data.data
+        if(PREBOOKING.data.data){
             return {
                 error: false,
                 message: "successful",
