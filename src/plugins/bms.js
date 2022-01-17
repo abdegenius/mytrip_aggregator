@@ -115,24 +115,13 @@ module.exports = fp(async function (fastify, opts) {
             } 
         })
         res = PREBOOKING.data
-        return {
-                error: false,
-                message: "successful",
-                info: "Data Avilable",
-                data: [
-                    {
-                        "order_status": "confirmed",
-                        "data": res
-                    }
-                ]
-            }
-        if(PREBOOKING.data.data){
-            
+        return "reached"
+        if(res){
             let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
                 return {
                     error: false,
                     message: "successful",
-                    info: "Data Avilable",
+                    info: "Data Available",
                     data: [
                         {
                             "order_status": "confirmed",
