@@ -114,9 +114,8 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             } 
         })
-            res = PREBOOKING.data.data
-        if(PREBOOKING.data.data){
-            return {
+        res = PREBOOKING.data
+        return {
                 error: false,
                 message: "successful",
                 info: "Data Avilable",
@@ -127,6 +126,8 @@ module.exports = fp(async function (fastify, opts) {
                     }
                 ]
             }
+        if(PREBOOKING.data.data){
+            
             let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
                 return {
                     error: false,
