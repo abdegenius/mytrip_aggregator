@@ -104,11 +104,9 @@ module.exports = fp(async function (fastify, opts) {
   fastify.decorate('BMSBookTrip', async function (payload) {
   
     try{
-        const GET_BOOKING = await axios.post(api+`book_trip`, 
+        const PREBOOKING = await axios.post(api+`prebooking`, 
         {
-            "trip_id": payload.trip_id,
-            "agent_email": payload.agent_email,
-            "passengers": payload.passengers
+            "trip_id": payload.trip_id
         },
         {
             headers: {
@@ -116,39 +114,49 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             } 
         })
-        return GET_BOOKING.data
-        if(GET_BOOKING.data){
-            res = GET_BOOKING.data
+        if(PREBOOKING.data){
+            res = PREBOOKING.data
+            return {
+                error: false,
+                message: "successful",
+                info: "Data Avilable",
+                data: [
+                    {
+                        "order_status": "confirmed",
+                        "data": res
+                    }
+                ]
+            }
+            let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
                 return {
                     error: false,
                     message: "successful",
                     info: "Data Avilable",
-                    data: res
-                    // [
-                    //     {
-                    //         "order_status": "confirmed",
-                    //         "order_id": response.operator_pnr,
-                    //         "order_name": response.passenger_details[0].name,
-                    //         "order_email": response.passenger_details[0].email,
-                    //         "phone_number": response.passenger_details[0].mobile,
-                    //         "order_amount": response.total_fare,
-                    //         "trip_id": payload.trip_id,
-                    //         "origin_id": payload.origin_id,
-                    //         "destination_id": payload.destination_id,
-                    //         "order_ticket_date": new Date(response.issued_on * 1000),
-                    //         "order_total_seat": response.no_of_seats,
-                    //         "order_seats": payload.seat_numbers,
-                    //         "amount_per_seat": parseFloat(response.total_fare)/parseFloat(response.no_of_seats),
-                    //         "order_number": response.ticket_number,
-                    //         "vehicle_no": response.bus_type,
-                    //         "narration": response.origin.toUpperCase() + " TO " + response.destination.toUpperCase(),
-                    //         "departure_time": payload.departure_time,
-                    //         "departure_terminal": response.origin.toUpperCase(),
-                    //         "destination_terminal":  response.destination.toUpperCase(),
-                    //         "seat_details": seat_details,
-                    //         "provider": "ABC"
-                    //     }
-                    // ]
+                    data: [
+                        {
+                            "order_status": "confirmed",
+                            "order_id": Date.now(),
+                            "order_name": primary_user.length > 0 ? primary_user.name : "",
+                            "order_email": primary_user.length > 0 ? primary_user.email : "",
+                            "phone_number": primary_user.length > 0 ? primary_user.phone : "",
+                            "order_amount": parseFloat(payload.amount_per_seat) * parseFloat(count(payload.passengers)),
+                            "trip_id": payload.trip_id,
+                            "origin_id": payload.origin_id,
+                            "destination_id": payload.destination_id,
+                            "order_ticket_date": new Date(Date.now() * 1000),
+                            "order_total_seat": count(payload.passengers),
+                            "order_seats": payload.seat_numbers,
+                            "amount_per_seat": payload.amount_per_seat,
+                            "order_number": ceil(Date.now()/Math.random()),
+                            "vehicle_no": "",
+                            "narration": response.origin.toUpperCase() + " TO " + response.destination.toUpperCase(),
+                            "departure_time": payload.departure_time,
+                            "departure_terminal": response.origin.toUpperCase(),
+                            "destination_terminal":  response.destination.toUpperCase(),
+                            "seat_details": payload.passengers,
+                            "provider": "ABC"
+                        }
+                    ]
                 }
         }
         else{
