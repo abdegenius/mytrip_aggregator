@@ -117,7 +117,9 @@ module.exports = fp(async function (fastify, opts) {
             }
         })
         let result = BOOK_TRIP.data
-        return result;
+        let vehicle = result.message.vehicle;
+        let departure = result.message.departure_terminal.substring(0,-3);
+        let destination = result.message.destination_terminal.substring(0,-3);
         let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
         return {
             error: false,
@@ -130,20 +132,20 @@ module.exports = fp(async function (fastify, opts) {
                     "order_name": primary_user.length > 0 ? primary_user.name : "",
                     "order_email": primary_user.length > 0 ? primary_user.email : "",
                     "phone_number": primary_user.length > 0 ? primary_user.phone : "",
-                    "order_amount": parseFloat(payload.amount_per_seat) * parseFloat(payload.passengers.length),
+                    "order_amount": result.message.total_fare,
                     "trip_id": payload.trip_id,
                     "origin_id": payload.origin_id,
                     "destination_id": payload.destination_id,
                     "order_ticket_date": new Date(Date.now() * 1000),
-                    "order_total_seat": payload.passengers.length,
+                    "order_total_seat": result.message.total_seats,
                     "order_seats": payload.seat_numbers,
                     "amount_per_seat": payload.amount_per_seat,
-                    "order_number": Math.ceil(Date.now()/Math.random()),
-                    "vehicle_no": "",
-                    "narration": "",
-                    "departure_time": "",
-                    "departure_terminal": "",
-                    "destination_terminal":  "",
+                    "order_number": result.message.booking_number,
+                    "vehicle_no": vehicle,
+                    "narration": departure + " - " + destination,
+                    "departure_time": result.message.departure_time,
+                    "departure_terminal": departure,
+                    "destination_terminal":  destination,
                     "seat_details": payload.passengers,
                     "provider": "BMS"
                 }
