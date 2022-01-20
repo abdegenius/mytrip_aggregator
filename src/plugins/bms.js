@@ -119,6 +119,7 @@ module.exports = fp(async function (fastify, opts) {
         const data = await Promise.all(BOOK_TRIP)
         if(data){
             let result = data.data
+            return result
             let departure = result.message.departure_terminal.substring(0,-3);
             let destination = result.message.destination_terminal.substring(0,-3);
             let vehicle = result.message.vehicle;
