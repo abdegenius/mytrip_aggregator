@@ -116,7 +116,7 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             }
         })
-        let result = BOOK_TRIP.data.data
+        let result = BOOK_TRIP.data
         return result
         let vehicle = result.message.vehicle;
         let departure = result.message.departure_terminal.substring(0,-3);
