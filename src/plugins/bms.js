@@ -124,7 +124,7 @@ module.exports = fp(async function (fastify, opts) {
                     "order_total_seat": payload.passengers.length,
                     "order_seats": payload.seat_numbers,
                     "amount_per_seat": payload.amount_per_seat,
-                    "order_number": ceil(Date.now()/Math.random()),
+                    "order_number": Math.ceil(Date.now()/Math.random()),
                     "vehicle_no": "",
                     "narration": "",
                     "departure_time": "",
