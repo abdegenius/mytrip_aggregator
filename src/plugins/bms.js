@@ -108,7 +108,8 @@ module.exports = fp(async function (fastify, opts) {
         {
             "schedule_id": payload.trip_id,
             "agent_email": payload.agent_email,
-            "passengers": payload.passengers
+            "passengers": payload.passengers,
+            "seat_numbers": payload.seat_numbers
         }, 
         {
             headers: {
