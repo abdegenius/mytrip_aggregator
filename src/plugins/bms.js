@@ -102,60 +102,39 @@ module.exports = fp(async function (fastify, opts) {
   })
 
   fastify.decorate('BMSBookTrip', async function (payload) {
-  
+
     try{
-        const PREBOOKING = await axios.post(api+`prebooking`, 
-        {
-            "trip_id": payload.trip_id
-        },
-        {
-            headers: {
-                'api_key': key,
-                'Content-Type': 'application/json'
-            } 
-        })
-        res = PREBOOKING.data
-        return "reached"
-        if(res){
-            let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
-                return {
-                    error: false,
-                    message: "successful",
-                    info: "Data Available",
-                    data: [
-                        {
-                            "order_status": "confirmed",
-                            "order_id": Date.now(),
-                            "order_name": primary_user.length > 0 ? primary_user.name : "",
-                            "order_email": primary_user.length > 0 ? primary_user.email : "",
-                            "phone_number": primary_user.length > 0 ? primary_user.phone : "",
-                            "order_amount": parseFloat(payload.amount_per_seat) * parseFloat(count(payload.passengers)),
-                            "trip_id": payload.trip_id,
-                            "origin_id": payload.origin_id,
-                            "destination_id": payload.destination_id,
-                            "order_ticket_date": new Date(Date.now() * 1000),
-                            "order_total_seat": count(payload.passengers),
-                            "order_seats": payload.seat_numbers,
-                            "amount_per_seat": payload.amount_per_seat,
-                            "order_number": ceil(Date.now()/Math.random()),
-                            "vehicle_no": "",
-                            "narration": response.origin.toUpperCase() + " TO " + response.destination.toUpperCase(),
-                            "departure_time": payload.departure_time,
-                            "departure_terminal": response.origin.toUpperCase(),
-                            "destination_terminal":  response.destination.toUpperCase(),
-                            "seat_details": payload.passengers,
-                            "provider": "ABC"
-                        }
-                    ]
+        let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
+        return primary_user;
+        return {
+            error: false,
+            message: "successful",
+            info: "Data Available",
+            data: [
+                {
+                    "order_status": "confirmed",
+                    "order_id": Date.now(),
+                    "order_name": primary_user.length > 0 ? primary_user.name : "",
+                    "order_email": primary_user.length > 0 ? primary_user.email : "",
+                    "phone_number": primary_user.length > 0 ? primary_user.phone : "",
+                    "order_amount": parseFloat(payload.amount_per_seat) * parseFloat(count(payload.passengers)),
+                    "trip_id": payload.trip_id,
+                    "origin_id": payload.origin_id,
+                    "destination_id": payload.destination_id,
+                    "order_ticket_date": new Date(Date.now() * 1000),
+                    "order_total_seat": count(payload.passengers),
+                    "order_seats": payload.seat_numbers,
+                    "amount_per_seat": payload.amount_per_seat,
+                    "order_number": ceil(Date.now()/Math.random()),
+                    "vehicle_no": "",
+                    "narration": "",
+                    "departure_time": "",
+                    "departure_terminal": "",
+                    "destination_terminal":  "",
+                    "seat_details": payload.passengers,
+                    "provider": "BMS"
                 }
-        }
-        else{
-            return {
-                error: true,
-                message: "cannot complete booking",
-                info: GET_BOOKING.data.response.message,
-                data: []
-            };
+            ]
         }
     }
     catch(error){

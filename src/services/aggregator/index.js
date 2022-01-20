@@ -39,7 +39,8 @@ module.exports = async function (fastify, opts) {
           trip_id,
           trip_date,
           provider,
-          agent_email
+          agent_email,
+          extra
         } = request.body
         const payload = {
             "seat_numbers": seat_numbers,
@@ -52,7 +53,8 @@ module.exports = async function (fastify, opts) {
             "trip_id": trip_id,
             "trip_date": trip_date,
             "provider": provider,
-            "agent_email": agent_email
+            "agent_email": agent_email,
+            "extra": extra
         }
         let book_trip;
         if(provider.toUpperCase() === "ABC"){
