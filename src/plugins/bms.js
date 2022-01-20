@@ -107,7 +107,8 @@ module.exports = fp(async function (fastify, opts) {
         const BOOK_TRIP = await axios.post(api+`book_trip`,
         {
             "schedule_id": payload.trip_id,
-            "agent_email": payload.agent_email
+            "agent_email": payload.agent_email,
+            "passengers": payload.passengers
         }, 
         {
             headers: {
