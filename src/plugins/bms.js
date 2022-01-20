@@ -117,9 +117,9 @@ module.exports = fp(async function (fastify, opts) {
             }
         })
         let result = BOOK_TRIP.data
-        let vehicle = result.message.vehicle;
         let departure = result.message.departure_terminal.substring(0,-3);
         let destination = result.message.destination_terminal.substring(0,-3);
+        let vehicle = result.message.vehicle;
         let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
         return {
             error: false,
