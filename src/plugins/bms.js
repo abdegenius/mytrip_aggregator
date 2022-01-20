@@ -104,6 +104,18 @@ module.exports = fp(async function (fastify, opts) {
   fastify.decorate('BMSBookTrip', async function (payload) {
 
     try{
+        const BOOK_TRIP = await axios.post(api+`book_trip`,
+        {
+            "schedule_id": payload.schedule_id,
+            "agent_email": payload.agent_email
+        }, 
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        let result = BOOK_TRIP.data.data
+        return result;
         let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
         return {
             error: false,
