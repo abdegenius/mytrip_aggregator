@@ -116,7 +116,7 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             }
         })
-        let result = BOOK_TRIP.data.data
+        let result = BOOK_TRIP.data
         return result;
         let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
         return {
