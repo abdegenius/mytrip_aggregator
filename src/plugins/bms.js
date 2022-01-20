@@ -105,7 +105,6 @@ module.exports = fp(async function (fastify, opts) {
 
     try{
         let primary_user = payload.passengers.find(passenger => passenger.is_primary == true)
-        return primary_user;
         return {
             error: false,
             message: "successful",
