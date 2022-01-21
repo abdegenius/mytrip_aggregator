@@ -116,8 +116,14 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             }
         })
-        const result = BOOK_TRIP.data
-        return result.message
+        if(BOOK_TRIP.data){
+            return {
+                error: false,
+                message: "successful",
+                info: "Data Avilable",
+                data: BOOK_TRIP.data
+            }
+        }
     }
     catch(error){
         return {
