@@ -117,7 +117,7 @@ module.exports = fp(async function (fastify, opts) {
             }
         })
         const result = BOOK_TRIP.data
-        return result
+        return {result}
     }
     catch(error){
         return {
