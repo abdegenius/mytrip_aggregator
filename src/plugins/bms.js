@@ -116,9 +116,10 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             }
         })
+        let res = BOOK_TRIP.data
         let data = []
-        if(BOOK_TRIP.data){
-            data.push(BOOK_TRIP.data)
+        if(res){
+            data.push(res)
             return {
                 error: false,
                 message: "successful",
