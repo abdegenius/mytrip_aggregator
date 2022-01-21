@@ -273,7 +273,7 @@ module.exports = fp(async function (fastify, opts) {
                         return {
                             error: false,
                             message: "successful",
-                            info: "Data Avilable",
+                            info: "Data Available",
                             data: DATA
                         }
                     }
@@ -401,7 +401,7 @@ module.exports = fp(async function (fastify, opts) {
                 return {
                     error: false,
                     message: "successful",
-                    info: "Data Avilable",
+                    info: "Data Available",
                     data: [
                         {
                             "order_status": "confirmed",

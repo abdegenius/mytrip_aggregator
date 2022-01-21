@@ -116,12 +116,14 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             }
         })
+        let data = []
         if(BOOK_TRIP.data){
+            data[] = BOOK_TRIP.data
             return {
                 error: false,
                 message: "successful",
-                info: "Data Avilable",
-                data: BOOK_TRIP.data
+                info: "Data Available",
+                data: data
             }
         }
     }
