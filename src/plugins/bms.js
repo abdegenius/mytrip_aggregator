@@ -117,15 +117,8 @@ module.exports = fp(async function (fastify, opts) {
             }
         })
         let res = BOOK_TRIP.data
-        let data = []
         if(res){
-            data.push(res)
-            return {
-                error: false,
-                message: "successful",
-                info: "Data Available",
-                data: data
-            }
+            return res
         }
     }
     catch(error){
