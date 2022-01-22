@@ -116,7 +116,7 @@ module.exports = fp(async function (fastify, opts) {
                 'Content-Type': 'application/json'
             }
         })
-        let res = BOOK_TRIP.data.data
+        let res = BOOK_TRIP.data
         if(res){
             return res;
         }
