@@ -118,7 +118,9 @@ module.exports = fp(async function (fastify, opts) {
         })
         let res = BOOK_TRIP.data
         if(res){
-            return res;
+            return {
+                'data': res
+            };
         }
     }
     catch(error){
