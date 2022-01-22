@@ -15,10 +15,12 @@ module.exports = async function (fastify, opts) {
         const abc_data = await fastify.ABCCheckTrips(payload);
         const guo_data = await fastify.GUOCheckTrips(payload);
         const bms_data = await fastify.BMSCheckTrips(payload);
+        const pmt_data = await fastify.PMTCheckTrips(payload);
         reply.code(200).type('application/json').send({
           "GUO":(guo_data==undefined ? [] : guo_data),
           "ABC":(abc_data==undefined ? [] : abc_data),
-          "BMS":(bms_data==undefined ? [] : bms_data)
+          "BMS":(bms_data==undefined ? [] : bms_data),
+          "PMT":(pmt_data==undefined ? [] : pmt_data)
         })
     }
     catch(error){
@@ -63,6 +65,9 @@ module.exports = async function (fastify, opts) {
         }
         if(provider.toUpperCase() === "BMS"){
           book_trip = await fastify.BMSBookTrip(payload)
+        }
+        if(provider.toUpperCase() === "PMT"){
+          book_trip = await fastify.PMTBookTrip(payload)
         }
         reply.code(200).type('application/json').send(book_trip)
     }
