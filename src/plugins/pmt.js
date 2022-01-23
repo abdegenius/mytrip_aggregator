@@ -82,7 +82,7 @@ module.exports = fp(async function (fastify, opts) {
                                 "departure_terminal": terminal_from.name,
                                 "destination_terminal": terminal_to.name,
                                 "vehicle": trip.vehicle.name,
-                                "boarding_at": "",
+                                "boarding_at": trip.pmtRoutes[0].id,
                                 "departure_address": terminal_from.address,
                                 "destination_address": terminal_to.address
                             });
