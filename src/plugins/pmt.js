@@ -179,18 +179,14 @@ module.exports = fp(async function (fastify, opts) {
                 if(token){
                     try{
                         let seat_numbers = payload.seat_numbers+","
-                        let allseats = seat_numbers.split(",")
-                        let total_seats = allseats.length
-                        let last = allseats[total_seats-1]
-                        let seats = (last == '') ? allseats.pop() : allseats
-                        
+                        let seats = seat_numbers.split(",")
                         let passenger = PASSENGERS.payload
 
                         const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
                             "amount": Number(payload.amount_per_seat),
                             "passenger": passenger.id,
                             "gateway": {"currency": "NGN"},
-                            "paymentGateway": "PAYSTACK",
+                            "paymentGateway": "MYTRIP",
                             "paymentMethod": "GATEWAY",
                             "pmtRoute": payload.boarding_at,
                             "pmtSchedule": payload.trip_id,
