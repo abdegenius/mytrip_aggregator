@@ -18,36 +18,27 @@ module.exports = fp(async function (fastify, opts) {
         const STATES = PMT_STATES.data
         if(STATES.success == true){
             const ALL_STATES = STATES.payload
-            return ALL_STATES
-            // ALL_STATES.filter((state) => {
-            //     if(state.name.toUpperCase().includes(departure_state) || departure_state.includes(state.name.toUpperCase())){
-            //         dep = state
-            //     }
-            //     if(state.name.toUpperCase().includes(destination_state) || destination_state.includes(state.name.toUpperCase())){
-            //         des = state
-            //     }
-            // })
+    
+            ALL_STATES.filter((state) => {
+                if(state.name.toUpperCase().includes(departure_state) || departure_state.includes(state.name.toUpperCase())){
+                    dep = state
+                }
+                if(state.name.toUpperCase().includes(destination_state) || destination_state.includes(state.name.toUpperCase())){
+                    des = state
+                }
+            })
+
+            return ALL_STATES;
 
 
             // if(dep != "" && des != ""){
-            //     try{
-            //     const CHECK_TRIP = await axios.get(api+`/pmt/pmt-schedules/public?terminalTo=${des.id}&seatQuantity=1&terminalFrom=${dep.id}&boardingDate=${payload.trip_date}`, {
+            //     const CHECK_TRIP = await axios.get(api+`/pmt/pmt-schedules/public?stateTo=${des.id}&seatQuantity=1&stateFrom=${dep.id}&boardingDate=${payload.trip_date}`, {
             //         headers: {
             //             'Content-Type': 'application/json'
             //         }
             //     })
-            //     return CHECK_TRIP
-            //     }
-            //     catch(error){
-            //         return {
-            //             error: true,
-            //             message: "failed",
-            //             info: error.message,
-            //             data: []
-            //         };
-            //     }
-            //     if(CHECK_TRIP.data.success == true){
             //     const TRIPS = CHECK_TRIP.data
+            //     if(TRIPS.success == true){
             //         const GET_TERMINALS = await axios.get(api+`/erp/terminals/public?subsidiary=PMT`, {
             //             headers: {
             //                 'Content-Type': 'application/json'
