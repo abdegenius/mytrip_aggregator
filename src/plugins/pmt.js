@@ -245,8 +245,8 @@ module.exports = fp(async function (fastify, opts) {
                                         "vehicle_no": "",
                                         "narration": terminal_from.name+" TO "+terminal_to.name,
                                         "departure_time": payload.departure_time,
-                                        "departure_terminal": terminal_from.address,
-                                        "destination_terminal":  terminal_to.address,
+                                        "departure_terminal": terminal_from.name,
+                                        "destination_terminal":  terminal_to.name,
                                         "seat_details": payload.passengers,
                                         "provider": "PMT"
                                     }
