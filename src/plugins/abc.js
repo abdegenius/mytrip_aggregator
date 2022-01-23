@@ -341,6 +341,7 @@ module.exports = fp(async function (fastify, opts) {
             "email": passenger.email,
             "phone": passenger.phone,
             "next_of_kin": passenger.next_of_kin,
+            "blood": passenger.blood ? passenger.blood : "",
             "next_of_kin_phone": passenger.next_of_kin_phone,
             "seat_number": seats[index]
         })
@@ -351,6 +352,7 @@ module.exports = fp(async function (fastify, opts) {
             "name": passenger.name,
             "age": passenger.age,
             "sex": passenger.sex.substring(0,1),
+            "blood": passenger.blood ? passenger.blood : "",
             "is_primary": "true",
             "id_card_type": "none",
             "id_card_number": "none",
