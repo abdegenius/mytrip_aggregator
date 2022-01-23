@@ -248,8 +248,7 @@ module.exports = fp(async function (fastify, opts) {
                                         "departure_terminal": terminal_from.name,
                                         "destination_terminal":  terminal_to.name,
                                         "seat_details": payload.passengers,
-                                        "provider": "PMT",
-                                        "payload": booking
+                                        "provider": "PMT"
                                     }
                                 ]
                             }
