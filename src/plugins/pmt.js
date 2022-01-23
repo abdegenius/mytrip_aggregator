@@ -180,8 +180,9 @@ module.exports = fp(async function (fastify, opts) {
                     try{
                         let seat_numbers = payload.seat_numbers+","
                         let seats = seat_numbers.split(",")
+                        seats.filter(Number)
                         let passenger = PASSENGERS.payload
-                        
+
                         const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
                             "amount": Number(payload.amount_per_seat),
                             "passenger": passenger.id,
@@ -201,6 +202,26 @@ module.exports = fp(async function (fastify, opts) {
                         })
                         const BOOKINGS = MAKE_BOOKING.data
                         if(BOOKINGS.success == true){
+                            let booking = BOOKINGS.payload
+                            const GET_TERMINALS = await axios.get(api+`/erp/terminals/public?subsidiary=PMT`, {
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            const TERMINALS = GET_TERMINALS.data
+                            let all_terminals;
+                            if(TERMINALS.success){
+                                all_terminals = TERMINALS.payload
+                            }
+                            let terminal_from, terminal_to
+                            all_terminals.filter(terminal => {
+                                if(terminal.id == payload.origin_id){
+                                    terminal_from = terminal
+                                }
+                                if(terminal.id == payload.destination_id){
+                                    terminal_to = terminal
+                                }
+                            })
                             return {
                                 error: false,
                                 message: "successful",
@@ -208,27 +229,26 @@ module.exports = fp(async function (fastify, opts) {
                                 data: [
                                     {
                                         "order_status": "confirmed",
-                                        "order_id": "",
+                                        "order_id": booking.id,
                                         "order_name":primary.name,
                                         "order_email":primary.email,
                                         "phone_number":primary.mobile,
-                                        "order_amount": 0,
+                                        "order_amount": booking.fare * seats.length,
                                         "trip_id": payload.trip_id,
                                         "origin_id": payload.origin_id,
                                         "destination_id": payload.destination_id,
-                                        "order_ticket_date": new Date(Date.now() * 1000),
-                                        "order_total_seat": 0,
+                                        "order_ticket_date": booking.boardingDate,
+                                        "order_total_seat": seats.length,
                                         "order_seats": payload.seat_numbers,
-                                        "amount_per_seat": 0,
-                                        "order_number": "",
+                                        "amount_per_seat": booking.fare,
+                                        "order_number": booking.code,
                                         "vehicle_no": "",
-                                        "narration": "",
+                                        "narration": terminal_from.name+" TO "+terminal_to.name,
                                         "departure_time": payload.departure_time,
-                                        "departure_terminal": "",
-                                        "destination_terminal":  "",
+                                        "departure_terminal": terminal_from.address,
+                                        "destination_terminal":  terminal_to.address,
                                         "seat_details": payload.passengers,
-                                        "provider": "PMT",
-                                        "payload": BOOKINGS.payload
+                                        "provider": "PMT"
                                     }
                                 ]
                             }
