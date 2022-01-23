@@ -38,7 +38,6 @@ module.exports = fp(async function (fastify, opts) {
                 const TRIPS = CHECK_TRIP.data
                 if(TRIPS.success == true){
                     let all_trips = TRIPS.payload
-                    return all_trips
                     const GET_TERMINALS = await axios.get(api+`/erp/terminals/public?subsidiary=PMT`, {
                         headers: {
                             'Content-Type': 'application/json'
@@ -50,7 +49,7 @@ module.exports = fp(async function (fastify, opts) {
                         all_terminals = TERMINALS.payload
                     }
                     let DATA = []
-                    TRIPS.payload.forEach(trip => {
+                    all_trips.forEach(trip => {
                         let terminal_from, terminal_to
                         all_terminals.filter(terminal => {
                             if(terminal.id == trip.pmtRoutes[0].terminalFrom){
@@ -69,7 +68,7 @@ module.exports = fp(async function (fastify, opts) {
                                 "trip_id": trip.id,
                                 "trip_no": trip.code,
                                 "trip_date": payload.trip_date,
-                                "departure_time":schedule_data.data.result.main_dep_time,
+                                "departure_time":trip.boardingDate,
                                 "origin_id": dep.id,
                                 "destination_id": des.id,
                                 "narration": terminal_from.name+ " TO "+terminal_to.name,
