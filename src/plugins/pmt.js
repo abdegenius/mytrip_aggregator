@@ -183,9 +183,9 @@ module.exports = fp(async function (fastify, opts) {
                     const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
                         "amount": payload.amount_per_seat,
                         "passenger": passenger.id,
-                        "gateway": {"currency": ""},
-                        "paymentGateway": "",
-                        "paymentMethod": "",
+                        "gateway": {"currency": "NGN"},
+                        "paymentGateway": "MYTRIP",
+                        "paymentMethod": "GATEWAY",
                         "pmtRoute": payload.boarding_at,
                         "pmtSchedule": payload.trip_id,
                         "terminalFrom": payload.origin_id,
