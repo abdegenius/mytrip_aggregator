@@ -28,91 +28,90 @@ module.exports = fp(async function (fastify, opts) {
                 }
             })
 
-            return ALL_STATES;
 
-
-            // if(dep != "" && des != ""){
-            //     const CHECK_TRIP = await axios.get(api+`/pmt/pmt-schedules/public?stateTo=${des.id}&seatQuantity=1&stateFrom=${dep.id}&boardingDate=${payload.trip_date}`, {
-            //         headers: {
-            //             'Content-Type': 'application/json'
-            //         }
-            //     })
-            //     const TRIPS = CHECK_TRIP.data
-            //     if(TRIPS.success == true){
-            //         const GET_TERMINALS = await axios.get(api+`/erp/terminals/public?subsidiary=PMT`, {
-            //             headers: {
-            //                 'Content-Type': 'application/json'
-            //             }
-            //         })
-            //         const TERMINALS = GET_TERMINALS.data
-            //         let all_terminals;
-            //         if(TERMINALS.success){
-            //             all_terminals = TERMINALS.payload
-            //         }
-            //         let DATA = []
-            //         TRIPS.payload.forEach(trip => {
-            //             let terminal_from, terminal_to
-            //             all_terminals.filter(terminal => {
-            //                 if(terminal.id == trip.pmtRoutes[0].terminalFrom){
-            //                     terminal_from = terminal
-            //                 }
-            //                 if(terminal.id == trip.pmtRoutes[0].terminalTo){
-            //                     terminal_to = terminal
-            //                 }
-            //             })
-            //             if(terminal_from && terminal_to){
-            //                 DATA.push({
-            //                     "provider": {
-            //                         "name": "Peace Mass Transit",
-            //                         "short_name": "PMT"
-            //                     },
-            //                     "trip_id": trip.id,
-            //                     "trip_no": trip.code,
-            //                     "trip_date": payload.trip_date,
-            //                     "departure_time":schedule_data.data.result.main_dep_time,
-            //                     "origin_id": dep.id,
-            //                     "destination_id": des.id,
-            //                     "narration": terminal_from.name+ " TO "+terminal_to.name,
-            //                     "fare":  trip.pmtRoutes[0].fareClass1,
-            //                     "total_seats": trip.vehicle.seatingCapacity,
-            //                     "available_seats": [],
-            //                     "blocked_seats": [],
-            //                     "special_seats": [],
-            //                     "special_seats_fare": "",
-            //                     "order_id": "",
-            //                     "departure_terminal": terminal_from.name,
-            //                     "destination_terminal": terminal_to.name,
-            //                     "vehicle": trip.vehicle.name,
-            //                     "boarding_at": "",
-            //                     "departure_address": terminal_from.address,
-            //                     "destination_address": terminal_to.address
-            //                 });
-            //             }
-            //         });
-            //         return {
-            //             error: false,
-            //             message: "successful",
-            //             info: "Data Available",
-            //             data: DATA
-            //         }
-            //     }
-            //     else{
-            //         return {
-            //             error: true,
-            //             message: "failed",
-            //             info: "No trips found",
-            //             data: []
-            //         };
-            //     }
-            // }
-            // else{
-            //     return {
-            //         error: true,
-            //         message: "failed",
-            //         info: "Departure or Destination States does not belong to our route",
-            //         data: []
-            //     };
-            // }
+            if(dep != "" && des != ""){
+                const CHECK_TRIP = await axios.get(api+`/pmt/pmt-schedules/public?stateTo=${des.id}&seatQuantity=1&stateFrom=${dep.id}&boardingDate=${payload.trip_date}`, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                const TRIPS = CHECK_TRIP.data
+                    return TRIPS
+                if(TRIPS.success == true){
+                    const GET_TERMINALS = await axios.get(api+`/erp/terminals/public?subsidiary=PMT`, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    const TERMINALS = GET_TERMINALS.data
+                    let all_terminals;
+                    if(TERMINALS.success){
+                        all_terminals = TERMINALS.payload
+                    }
+                    let DATA = []
+                    TRIPS.payload.forEach(trip => {
+                        let terminal_from, terminal_to
+                        all_terminals.filter(terminal => {
+                            if(terminal.id == trip.pmtRoutes[0].terminalFrom){
+                                terminal_from = terminal
+                            }
+                            if(terminal.id == trip.pmtRoutes[0].terminalTo){
+                                terminal_to = terminal
+                            }
+                        })
+                        if(terminal_from && terminal_to){
+                            DATA.push({
+                                "provider": {
+                                    "name": "Peace Mass Transit",
+                                    "short_name": "PMT"
+                                },
+                                "trip_id": trip.id,
+                                "trip_no": trip.code,
+                                "trip_date": payload.trip_date,
+                                "departure_time":schedule_data.data.result.main_dep_time,
+                                "origin_id": dep.id,
+                                "destination_id": des.id,
+                                "narration": terminal_from.name+ " TO "+terminal_to.name,
+                                "fare":  trip.pmtRoutes[0].fareClass1,
+                                "total_seats": trip.vehicle.seatingCapacity,
+                                "available_seats": [],
+                                "blocked_seats": [],
+                                "special_seats": [],
+                                "special_seats_fare": "",
+                                "order_id": "",
+                                "departure_terminal": terminal_from.name,
+                                "destination_terminal": terminal_to.name,
+                                "vehicle": trip.vehicle.name,
+                                "boarding_at": "",
+                                "departure_address": terminal_from.address,
+                                "destination_address": terminal_to.address
+                            });
+                        }
+                    });
+                    return {
+                        error: false,
+                        message: "successful",
+                        info: "Data Available",
+                        data: DATA
+                    }
+                }
+                else{
+                    return {
+                        error: true,
+                        message: "failed",
+                        info: "No trips found",
+                        data: []
+                    };
+                }
+            }
+            else{
+                return {
+                    error: true,
+                    message: "failed",
+                    info: "Departure or Destination States does not belong to our route",
+                    data: []
+                };
+            }
         }
         else{
             return {
