@@ -199,7 +199,17 @@ module.exports = fp(async function (fastify, opts) {
                             }
                         })
                         const BOOKINGS = MAKE_BOOKING.data
-                        return BOOKINGS
+                        return {
+                            error: false,
+                            message: "successful",
+                            info: "Data Available",
+                            data: [
+                                {
+                                    "order_status": "confirmed",
+                                    "payload": BOOKINGS
+                                }
+                            ]
+                        }
                         if(BOOKINGS.success == true){
                             return {
                                 error: false,
