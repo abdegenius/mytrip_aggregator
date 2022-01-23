@@ -180,7 +180,7 @@ module.exports = fp(async function (fastify, opts) {
                     try{
                         let seat_numbers = payload.seat_numbers+","
                         let seats = seat_numbers.split(",")
-                        seats.filter(s => s)
+                        seats = seats.filter((s) => s)
                         let passenger = PASSENGERS.payload
 
                         const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
