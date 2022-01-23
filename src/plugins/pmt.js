@@ -246,8 +246,11 @@ module.exports = fp(async function (fastify, opts) {
                     }
                     catch(error){
                         return {
-                            data: error
-                        }
+                            error: true,
+                            message: "failed",
+                            info: error.message,
+                            data: []
+                        };
                     }
                 }
                 else{
