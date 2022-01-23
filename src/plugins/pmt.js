@@ -4,6 +4,8 @@ const fp = require('fastify-plugin')
 const axios = require("axios")
 let api = `https://api.pmt.ng/api`
 let key = ``
+let email = `pmtagent.treepz@pmt.ng`
+let password = `pmt_treepz`
 module.exports = fp(async function (fastify, opts) {
   fastify.decorate('PMTCheckTrips', async function (payload) {
     try{
@@ -162,58 +164,90 @@ module.exports = fp(async function (fastify, opts) {
         })
         const PASSENGERS = SAVE_PASSENGERS.data
         if(PASSENGERS.success == true){
-            let seat_numbers = payload.seat_numbers+","
-            let seats = seat_numbers.split(",")
-            let passenger = PASSENGERS.payload
-            const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
-                "amount": payload.amount_per_seat,
-                "passenger": passenger.id,
-                "gateway": {"currency": ""},
-                "paymentGateway": "",
-                "paymentMethod": "",
-                "pmtRoute": payload.boarding_at,
-                "pmtSchedule": payload.trip_id,
-                "terminalFrom": payload.origin_id,
-                "seatPositions": seats,
-                "seatQuantity": seats.length
+            const LOGIN = await axios.post(api+`/erp/staff/login`, {
+                "email": email,
+                "password": password
             }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-            const BOOKINGS = MAKE_BOOKING.data
-            if(BOOKINGS.success == true){
-                return {
-                    error: false,
-                    message: "successful",
-                    info: "Data Available",
-                    data: [
-                        {
-                            "order_status": "confirmed",
-                            "order_id": "",
-                            "order_name":primary.name,
-                            "order_email":primary.email,
-                            "phone_number":primary.mobile,
-                            "order_amount": 0,
-                            "trip_id": payload.trip_id,
-                            "origin_id": payload.origin_id,
-                            "destination_id": payload.destination_id,
-                            "order_ticket_date": new Date(Date.now() * 1000),
-                            "order_total_seat": 0,
-                            "order_seats": payload.seat_numbers,
-                            "amount_per_seat": 0,
-                            "order_number": "",
-                            "vehicle_no": "",
-                            "narration": "",
-                            "departure_time": payload.departure_time,
-                            "departure_terminal": "",
-                            "destination_terminal":  "",
-                            "seat_details": payload.passengers,
-                            "provider": "PMT",
-                            "payload": BOOKINGS.payload
+            const GET_USER = LOGIN.data
+            if(GET_USER.success == true){
+                let user = GET_USER.payload
+                let token = user.token
+                if(token){
+                    let seat_numbers = payload.seat_numbers+","
+                    let seats = seat_numbers.split(",")
+                    let passenger = PASSENGERS.payload
+                    const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
+                        "amount": payload.amount_per_seat,
+                        "passenger": passenger.id,
+                        "gateway": {"currency": ""},
+                        "paymentGateway": "",
+                        "paymentMethod": "",
+                        "pmtRoute": payload.boarding_at,
+                        "pmtSchedule": payload.trip_id,
+                        "terminalFrom": payload.origin_id,
+                        "seatPositions": seats,
+                        "seatQuantity": seats.length
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer '+token
                         }
-                    ]
+                    })
+                    const BOOKINGS = MAKE_BOOKING.data
+                    if(BOOKINGS.success == true){
+                        return {
+                            error: false,
+                            message: "successful",
+                            info: "Data Available",
+                            data: [
+                                {
+                                    "order_status": "confirmed",
+                                    "order_id": "",
+                                    "order_name":primary.name,
+                                    "order_email":primary.email,
+                                    "phone_number":primary.mobile,
+                                    "order_amount": 0,
+                                    "trip_id": payload.trip_id,
+                                    "origin_id": payload.origin_id,
+                                    "destination_id": payload.destination_id,
+                                    "order_ticket_date": new Date(Date.now() * 1000),
+                                    "order_total_seat": 0,
+                                    "order_seats": payload.seat_numbers,
+                                    "amount_per_seat": 0,
+                                    "order_number": "",
+                                    "vehicle_no": "",
+                                    "narration": "",
+                                    "departure_time": payload.departure_time,
+                                    "departure_terminal": "",
+                                    "destination_terminal":  "",
+                                    "seat_details": payload.passengers,
+                                    "provider": "PMT",
+                                    "payload": BOOKINGS.payload
+                                }
+                            ]
+                        }
+                    }
                 }
+                else{
+                    return {
+                        error: true,
+                        message: "failed",
+                        info: "Invalid/empty token provided.",
+                        data: []
+                    };
+                }
+            }
+            else{
+                return {
+                    error: true,
+                    message: "failed",
+                    info: "Unable to login to proprietory provider.",
+                    data: []
+                };
             }
         }
         else{
