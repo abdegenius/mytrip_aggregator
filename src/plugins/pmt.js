@@ -182,26 +182,16 @@ module.exports = fp(async function (fastify, opts) {
                         let seats = seat_numbers.split(",")
                         let passenger = PASSENGERS.payload
                         const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
-                            // "amount": payload.amount_per_seat,
-                            // "passenger": passenger.id,
-                            // "gateway": {"currency": "NGN"},
-                            // "paymentGateway": "PAYSTACK",
-                            // "paymentMethod": "GATEWAY",
-                            // "pmtRoute": payload.boarding_at,
-                            // "pmtSchedule": payload.trip_id,
-                            // "terminalFrom": payload.origin_id,
-                            // "seatPositions": seats,
-                            // "seatQuantity": seats.length
-                            "amount": 500,
-                            "passenger": "5fb5993a750fc918a8e6d1dd",
+                            "amount": Number(payload.amount_per_seat),
+                            "passenger": passenger.id,
                             "gateway": {"currency": "NGN"},
                             "paymentGateway": "PAYSTACK",
                             "paymentMethod": "GATEWAY",
-                            "pmtRoute": "5da453018b209100170e33f8",
-                            "pmtSchedule": "61ec8c810b8fb2469013bb01",
-                            "terminalFrom": "5c51bc91860d8b5ac0000015",
-                            "seatPositions": [1,4,5],
-                            "seatQuantity": 3
+                            "pmtRoute": payload.boarding_at,
+                            "pmtSchedule": payload.trip_id,
+                            "terminalFrom": payload.origin_id,
+                            "seatPositions": seats,
+                            "seatQuantity": seats.length
                         }, {
                             headers: {
                                 'Content-Type': 'application/json',
