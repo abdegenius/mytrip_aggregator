@@ -144,7 +144,7 @@ module.exports = fp(async function (fastify, opts) {
             }
         })
         let primary_name = (primary.name+" "+primary.name);
-        primary_name.split(" ")
+        primary_name = primary_name.split(" ")
         const SAVE_PASSENGERS = await axios.post(api+`/pmt/passengers`, {
             "email": primary.email,
             "surname": primary_name.length > 0 ? primary_name[0] : "",
