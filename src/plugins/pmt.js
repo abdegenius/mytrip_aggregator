@@ -36,8 +36,9 @@ module.exports = fp(async function (fastify, opts) {
                     }
                 })
                 const TRIPS = CHECK_TRIP.data
-                    return TRIPS
                 if(TRIPS.success == true){
+                    let all_trips = TRIPS.payload
+                    return all_trips
                     const GET_TERMINALS = await axios.get(api+`/erp/terminals/public?subsidiary=PMT`, {
                         headers: {
                             'Content-Type': 'application/json'
