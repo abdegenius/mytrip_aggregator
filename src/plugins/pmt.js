@@ -177,58 +177,66 @@ module.exports = fp(async function (fastify, opts) {
                 let user = GET_USER.payload
                 let token = user.token
                 if(token){
-                    let seat_numbers = payload.seat_numbers+","
-                    let seats = seat_numbers.split(",")
-                    let passenger = PASSENGERS.payload
-                    const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
-                        "amount": payload.amount_per_seat,
-                        "passenger": passenger.id,
-                        "gateway": {"currency": "NGN"},
-                        "paymentGateway": "MYTRIP",
-                        "paymentMethod": "GATEWAY",
-                        "pmtRoute": payload.boarding_at,
-                        "pmtSchedule": payload.trip_id,
-                        "terminalFrom": payload.origin_id,
-                        "seatPositions": seats,
-                        "seatQuantity": seats.length
-                    }, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer '+token
+                    try{
+                        let seat_numbers = payload.seat_numbers+","
+                        let seats = seat_numbers.split(",")
+                        let passenger = PASSENGERS.payload
+                        const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
+                            "amount": payload.amount_per_seat,
+                            "passenger": passenger.id,
+                            "gateway": {"currency": "NGN"},
+                            "paymentGateway": "MYTRIP",
+                            "paymentMethod": "GATEWAY",
+                            "pmtRoute": payload.boarding_at,
+                            "pmtSchedule": payload.trip_id,
+                            "terminalFrom": payload.origin_id,
+                            "seatPositions": seats,
+                            "seatQuantity": seats.length
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer '+token
+                            }
+                        })
+                        const BOOKINGS = MAKE_BOOKING.data
+                        return BOOKINGS
+                        if(BOOKINGS.success == true){
+                            return {
+                                error: false,
+                                message: "successful",
+                                info: "Data Available",
+                                data: [
+                                    {
+                                        "order_status": "confirmed",
+                                        "order_id": "",
+                                        "order_name":primary.name,
+                                        "order_email":primary.email,
+                                        "phone_number":primary.mobile,
+                                        "order_amount": 0,
+                                        "trip_id": payload.trip_id,
+                                        "origin_id": payload.origin_id,
+                                        "destination_id": payload.destination_id,
+                                        "order_ticket_date": new Date(Date.now() * 1000),
+                                        "order_total_seat": 0,
+                                        "order_seats": payload.seat_numbers,
+                                        "amount_per_seat": 0,
+                                        "order_number": "",
+                                        "vehicle_no": "",
+                                        "narration": "",
+                                        "departure_time": payload.departure_time,
+                                        "departure_terminal": "",
+                                        "destination_terminal":  "",
+                                        "seat_details": payload.passengers,
+                                        "provider": "PMT",
+                                        "payload": BOOKINGS.payload
+                                    }
+                                ]
+                            }
                         }
-                    })
-                    const BOOKINGS = MAKE_BOOKING.data
-                    if(BOOKINGS.success == true){
+                    }
+                    catch(error){
                         return {
-                            error: false,
-                            message: "successful",
-                            info: "Data Available",
-                            data: [
-                                {
-                                    "order_status": "confirmed",
-                                    "order_id": "",
-                                    "order_name":primary.name,
-                                    "order_email":primary.email,
-                                    "phone_number":primary.mobile,
-                                    "order_amount": 0,
-                                    "trip_id": payload.trip_id,
-                                    "origin_id": payload.origin_id,
-                                    "destination_id": payload.destination_id,
-                                    "order_ticket_date": new Date(Date.now() * 1000),
-                                    "order_total_seat": 0,
-                                    "order_seats": payload.seat_numbers,
-                                    "amount_per_seat": 0,
-                                    "order_number": "",
-                                    "vehicle_no": "",
-                                    "narration": "",
-                                    "departure_time": payload.departure_time,
-                                    "departure_terminal": "",
-                                    "destination_terminal":  "",
-                                    "seat_details": payload.passengers,
-                                    "provider": "PMT",
-                                    "payload": BOOKINGS.payload
-                                }
-                            ]
+                            data: error
                         }
                     }
                 }
