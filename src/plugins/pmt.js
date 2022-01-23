@@ -182,7 +182,7 @@ module.exports = fp(async function (fastify, opts) {
                         let allseats = seat_numbers.split(",")
                         let total_seats = allseats.length
                         let last = allseats[total_seats-1]
-                        let seats = (last == ',') ? allseats.pop() : allseats
+                        let seats = (last == '') ? allseats.pop() : allseats
                         
                         let passenger = PASSENGERS.payload
 
