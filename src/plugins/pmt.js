@@ -186,7 +186,7 @@ module.exports = fp(async function (fastify, opts) {
                             "amount": Number(payload.amount_per_seat),
                             "passenger": passenger.id,
                             "gateway": {"currency": "NGN"},
-                            "paymentGateway": "MYTRIP",
+                            "paymentGateway": "PAYSTACK",
                             "paymentMethod": "GATEWAY",
                             "pmtRoute": payload.boarding_at,
                             "pmtSchedule": payload.trip_id,
