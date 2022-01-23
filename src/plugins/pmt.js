@@ -68,7 +68,7 @@ module.exports = fp(async function (fastify, opts) {
                                 "trip_id": trip.id,
                                 "trip_no": trip.code,
                                 "trip_date": payload.trip_date,
-                                "departure_time":trip.boardingDate,
+                                "departure_time": moment(trip.boardingDate).format("DD/MM/YYYY HH:MM"),
                                 "origin_id": terminal_from.id,
                                 "destination_id": terminal_to.id,
                                 "narration": terminal_from.name+ " TO "+terminal_to.name,
@@ -135,9 +135,7 @@ module.exports = fp(async function (fastify, opts) {
 
   fastify.decorate('PMTBookTrip', async function (payload) {
     try{
-        return {
-            message: "hello"
-        }
+        
     }
     catch(error){
         return {
