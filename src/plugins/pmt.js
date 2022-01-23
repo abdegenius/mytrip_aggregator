@@ -185,7 +185,7 @@ module.exports = fp(async function (fastify, opts) {
                         let seat_details = []
                         payload.passengers.forEach(p, i => {
                             let passenger = p;
-                            passenger["seat_number"] = seats[i]
+                            // passenger["seat_number"] = seats[i]
                             seat_details.push(passenger)
                         })
 
