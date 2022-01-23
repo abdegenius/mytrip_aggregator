@@ -135,6 +135,7 @@ module.exports = fp(async function (fastify, opts) {
 
   fastify.decorate('PMTBookTrip', async function (payload) {
     try{
+
         let all_passengers = payload.passengers
         let primary
         all_passengers.filter(passenger => {
@@ -186,7 +187,8 @@ module.exports = fp(async function (fastify, opts) {
                         "departure_terminal": "",
                         "destination_terminal":  "",
                         "seat_details": "seat_details",
-                        "provider": "PMT"
+                        "provider": "PMT",
+                        "payload": PASSENGERS.payload
                     }
                 ]
             }
