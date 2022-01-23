@@ -183,10 +183,10 @@ module.exports = fp(async function (fastify, opts) {
                         seats = seats.filter((s) => s)
                         let passenger = PASSENGERS.payload
                         let seat_details = []
-                        payload.passengers.forEach(p, i => {
-                            let passenger = p;
+                        payload.passengers.forEach(p => {
+                            // let passenger = p;
                             // passenger["seat_number"] = seats[i]
-                            seat_details.push(passenger)
+                            seat_details.push(p)
                         })
 
                         const MAKE_BOOKING = await axios.post(api+`/pmt/pmt-reservations/public`,{
