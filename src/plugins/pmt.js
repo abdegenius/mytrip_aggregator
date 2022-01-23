@@ -161,7 +161,34 @@ module.exports = fp(async function (fastify, opts) {
         const PASSENGERS = SAVE_PASSENGERS.data
         if(PASSENGERS.success == true){
             return {
-                data: PASSENGERS.payload
+                error: false,
+                message: "successful",
+                info: "Data Available",
+                data: [
+                    {
+                        "order_status": "confirmed",
+                        "order_id": "",
+                        "order_name":primary.name,
+                        "order_email":primary.email,
+                        "phone_number":primary.mobile,
+                        "order_amount": 0,
+                        "trip_id": payload.trip_id,
+                        "origin_id": payload.origin_id,
+                        "destination_id": payload.destination_id,
+                        "order_ticket_date": new Date(Date.now() * 1000),
+                        "order_total_seat": 0,
+                        "order_seats": payload.seat_numbers,
+                        "amount_per_seat": 0,
+                        "order_number": "",
+                        "vehicle_no": "",
+                        "narration": "",
+                        "departure_time": payload.departure_time,
+                        "departure_terminal": "",
+                        "destination_terminal":  "",
+                        "seat_details": "seat_details",
+                        "provider": "PMT"
+                    }
+                ]
             }
         }
         else{
