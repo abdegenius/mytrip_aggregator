@@ -135,7 +135,43 @@ module.exports = fp(async function (fastify, opts) {
 
   fastify.decorate('PMTBookTrip', async function (payload) {
     try{
-        
+        let all_passengers = payload.passengers
+        let primary
+        all_passengers.filter(passenger => {
+            if(passenger.is_primary == true){
+                primary = passenger
+            }
+        })
+        let primary_name = primary.name.split(" ");
+        const SAVE_PASSENGERS = await axios.post(api+`/pmt/passengers`, {
+            "email": primary.email,
+            "surname": primary_name.length > 0 ? primary_name[0] : "",
+            "otherName": primary_name.length > 1 ? primary_name[1] : "",
+            "gender": primary.sex.toUpperCase().substring(0,1),
+            "phone": primary.phone,
+            "contactPerson": primary.next_of_kin,
+            "contactPersonPhone": primary.next_of_kin_phone,
+            "address": "Behind Aso Estate, Lugbe, Airport Road, FCT Abuja",
+            "title": primary.title
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const PASSENGERS = SAVE_PASSENGERS.data
+        if(PASSENGERS.success == true){
+            return {
+                data: PASSENGERS.payload
+            }
+        }
+        else{
+            return {
+                error: true,
+                message: "failed",
+                info: "Cannot complete request, failed to save passenger details.",
+                data: []
+            };
+        }
     }
     catch(error){
         return {
