@@ -287,13 +287,11 @@ module.exports = fp(async function (fastify, opts) {
                                 data: DATA
                             }
                         }
-                        else{
-                            return {
-                                error: true,
-                                message: "FAILED: No trips found",
-                                info: "No trips found",
-                                data: []
-                            }
+                        return {
+                            error: true,
+                            message: "FAILED: No trips found",
+                            info: "No trips found",
+                            data: []
                         }
                     }
                     else{
