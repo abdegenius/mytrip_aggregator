@@ -326,6 +326,7 @@ module.exports = fp(async function (fastify, opts) {
 
 
   fastify.decorate('ABCBookTrip', async function (payload) {
+      return "REACHED";
     let customer = [];
     let trip_id = Number(payload.trip_id)
     let seats = payload.seat_numbers.trim().split(",")
@@ -391,7 +392,6 @@ module.exports = fp(async function (fastify, opts) {
         
         if(GET_BOOKING.data.result){
             const result = GET_BOOKING.data.result.ticket_details
-            return result;
             const COMPLETE_BOOKING = await axios.post(api+`confirm_booking/${result.pnr_number}.json?api_key=`+key, {
                 headers: {
                     'api_key': key,
