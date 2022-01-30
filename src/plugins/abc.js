@@ -291,7 +291,7 @@ module.exports = fp(async function (fastify, opts) {
                             error: true,
                             message: "FAILED: No trips found",
                             info: "No trips found",
-                            data: DATA
+                            data: []
                         }
                     }
                     else{
