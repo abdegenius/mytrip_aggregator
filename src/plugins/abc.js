@@ -279,7 +279,7 @@ module.exports = fp(async function (fastify, opts) {
                                 });
                             }
                         })
-                        if(DATA && DATA.length > 0){
+                        if(DATA){
                             return {
                                 error: false,
                                 message: "successful",
