@@ -134,6 +134,7 @@ module.exports = fp(async function (fastify, opts) {
         let destination_state = payload.destination_state
         let departure_state_terminals = ABC_STATES[departure_state]
         let destination_state_terminals = ABC_STATES[destination_state]
+        return destination_state_terminals
 
         if(destination_state_terminals.length > 0 && departure_state_terminals.length > 0){
 
@@ -280,7 +281,7 @@ module.exports = fp(async function (fastify, opts) {
                     else{
                         return {
                             error: true,
-                            message: "failed",
+                            message: "FAILED: No trips found",
                             info: "No trips found",
                             data: []
                         };
@@ -289,7 +290,7 @@ module.exports = fp(async function (fastify, opts) {
                 else{
                     return {
                         error: true,
-                        message: "failed",
+                        message: "FAILED: Terminals does not exist between states",
                         info: "Terminals does not exist between states",
                         data: []
                     };
@@ -298,7 +299,7 @@ module.exports = fp(async function (fastify, opts) {
             else{
                 return {
                     error: true,
-                    message: "failed",
+                    message: "FAILED: Terminals does not exist between states",
                     info: "Terminals does not exist between states",
                     data: []
                 };
@@ -308,7 +309,7 @@ module.exports = fp(async function (fastify, opts) {
         else{
             return {
                 error: true,
-                message: "failed",
+                message: "FAILED: Check provided states for errors, states does not exist",
                 info: "Check provided states for errors, states does not exist",
                 data: []
             };
@@ -317,7 +318,7 @@ module.exports = fp(async function (fastify, opts) {
     catch(error){
         return {
             error: true,
-            message: "failed",
+            message: "FAILED: "+error.message,
             info: error.message,
             data: []
         };
@@ -445,7 +446,7 @@ module.exports = fp(async function (fastify, opts) {
             else{
                 return {
                     error: true,
-                    message: "cannot complete booking",
+                    message: "FAILED: "+COMPLETE_BOOKING.data.response.message,
                     info: COMPLETE_BOOKING.data.response.message,
                     data: []
                 };
@@ -454,7 +455,7 @@ module.exports = fp(async function (fastify, opts) {
         else{
             return {
                 error: true,
-                message: "cannot complete booking",
+                message: "FAILED: "+GET_BOOKING.data.response.message,
                 info: GET_BOOKING.data.response.message,
                 data: []
             };
@@ -463,7 +464,7 @@ module.exports = fp(async function (fastify, opts) {
     catch(error){
         return {
             error: true,
-            message: "failed",
+            message: "FAILED: "+error.message,
             info: error.message,
             data: []
         };
