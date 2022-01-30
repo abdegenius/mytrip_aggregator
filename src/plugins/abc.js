@@ -220,9 +220,8 @@ module.exports = fp(async function (fastify, opts) {
                             });
                         })
                         let DATA = [];
-                        let isData = false;
-                        TRIP_DATA.forEach((trip) => {
-                            const schedule_data = axios({
+                        TRIP_DATA.forEach(async(trip) => {
+                            const schedule_data = await axios({
                                 method: 'GET',
                                 url: api+`ui_schedule/${trip[1]}.json`,
                                     headers: {
@@ -230,7 +229,6 @@ module.exports = fp(async function (fastify, opts) {
                                         'Content-Type': 'application/json'
                                     }
                             })
-                                
                             let available_seats = []
                             if(trip[9]){
                                 let seats = trip[9].split(",")
@@ -252,9 +250,6 @@ module.exports = fp(async function (fastify, opts) {
                             let boarding_data = schedule_data.data.result.bus_layout.boarding_stages.trim().split("|")
                             let dropping_data = schedule_data.data.result.bus_layout.dropoff_stages.trim().split("|")
                             if(schedule_data.data.result.service_name == "ABC TRANSPORT"){
-                                if(isData && isData == false){
-                                    isData = true;
-                                }
                                 DATA.push({
                                     "provider": {
                                         "name": "ABC Transport",
@@ -283,19 +278,11 @@ module.exports = fp(async function (fastify, opts) {
                                 });
                             }
                         })
-                        if (isData) {
-                            return {
-                                error: false,
-                                message: "successful",
-                                info: "Data Available",
-                                data: DATA
-                            }
-                        }
                         return {
-                            error: true,
-                            message: "FAILED: No trips found",
-                            info: "No trips found",
-                            data: []
+                            error: false,
+                            message: "successful",
+                            info: "Data Available",
+                            data: DATA
                         }
                     }
                     else{
