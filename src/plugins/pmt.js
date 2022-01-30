@@ -137,7 +137,6 @@ module.exports = fp(async function (fastify, opts) {
 
   fastify.decorate('PMTBookTrip', async function (payload) {
     try{
-
         let all_passengers = payload.passengers
         let primary
         all_passengers.filter(passenger => {
@@ -163,6 +162,12 @@ module.exports = fp(async function (fastify, opts) {
             }
         })
         const PASSENGERS = SAVE_PASSENGERS.data
+        return {
+            error: true,
+            message: PASSENGERS,
+            info: "Cannot complete request, failed to save passenger details.",
+            data: []
+        };
         if(PASSENGERS.success == true){
             const LOGIN = await axios.post(api+`/erp/staff/login`, {
                 "email": email,
