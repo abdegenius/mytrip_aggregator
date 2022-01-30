@@ -159,8 +159,6 @@ module.exports = fp(async function (fastify, opts) {
                 }
             })
 
-            return (DEPARTURE_STATE, DESTINATION_STATE)
-            
             if(DEPARTURE_STATE.length > 0 && DESTINATION_STATE.length > 0){
                 const GET_CITY_PAIRS = await axios.get(api+`city_pairs.json`, {
                     headers: {
@@ -197,17 +195,25 @@ module.exports = fp(async function (fastify, opts) {
                             'Content-Type': 'application/json'
                         }
                         })
-                    
                         return {
                             data: response.data.result
                         }
                     })
                     const TRIPS = await Promise.all(promises)
-                    
                     if(TRIPS.length > 0){
                         let TRIP_DATA = []
-                        TRIPS.forEach(trip => {
-                            trip.data.forEach((data,index) => {
+                        let TRIPS_EDIT = []
+                        TRIPS.filter(
+                            trip => {
+                                if(trip.data){
+                                    TRIPS_EDIT.push(
+                                        trip
+                                    )
+                                }
+                            }
+                        );
+                        TRIPS_EDIT.data.forEach(trip => {
+                            trip.forEach((data,index) => {
                                 if(index > 0){
                                     TRIP_DATA.push(data)
                                 }
