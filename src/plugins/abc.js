@@ -279,7 +279,7 @@ module.exports = fp(async function (fastify, opts) {
                                 });
                             }
                         })
-                        return DATA.length
+                        return DATA[0] ? "YES" : "NO"
                         if (typeof DATA !== 'undefined' && DATA.length > 0) {
                             return {
                                 error: false,
