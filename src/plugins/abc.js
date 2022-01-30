@@ -330,7 +330,7 @@ module.exports = fp(async function (fastify, opts) {
     let trip_id = Number(payload.trip_id)
     let seats = payload.seat_numbers.trim().split(",")
     let seat_details = [];
-    let seat_details2 = []
+    let seat_details2 = [];
     let seat_detail = [];
     payload.passengers.forEach((passenger,index) => {
         seat_details.push({

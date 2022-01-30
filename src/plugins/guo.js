@@ -217,8 +217,21 @@ module.exports = fp(async function (fastify, opts) {
         let customer = [];
         let seats = payload.seat_numbers.trim().split(",")
         let seat_details = [];
+        let seat_details2 = [];
         payload.passengers.forEach((passenger,index) => {
             seat_details.push({
+                "fare": (payload.amount_per_seat + ".00").toString(),
+                "title": passenger.title,
+                "age": passenger.age,
+                "sex": passenger.sex.substring(0,1),
+                "name": passenger.name,
+                "email": passenger.email,
+                "phone": passenger.phone,
+                "next_of_kin": passenger.next_of_kin,
+                "next_of_kin_phone": passenger.next_of_kin_phone,
+                "seat_number": seats[index]
+            })
+            seat_details2.push({
                 "fare": (payload.amount_per_seat + ".00").toString(),
                 "title": passenger.title,
                 "age": passenger.age,
@@ -306,7 +319,7 @@ module.exports = fp(async function (fastify, opts) {
                                 "narration": response.narration.toUpperCase(),
                                 "departure_terminal": dep_ter.toUpperCase(),
                                 "destination_terminal":  des_ter.toUpperCase(),
-                                "seat_details": seat_details,
+                                "seat_details": seat_details2,
                                 "provider": "GUO"
                             }
                         ]
