@@ -278,11 +278,17 @@ module.exports = fp(async function (fastify, opts) {
                                     "destination_address": dropping_data[2]
                                 });
                         })
+                        let NEW_DATA = []
+                        DATA.filter(data => {
+                            if(data.service){
+                                NEW_DATA.push(data)
+                            }
+                        })
                         return {
                             error: false,
                             message: "successful",
                             info: "Data Available",
-                            data: DATA
+                            data: NEW_DATA
                         }
                     }
                     else{
