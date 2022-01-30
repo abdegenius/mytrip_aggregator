@@ -250,32 +250,34 @@ module.exports = fp(async function (fastify, opts) {
                             let boarding_data = schedule_data.data.result.bus_layout.boarding_stages.trim().split("|")
                             let dropping_data = schedule_data.data.result.bus_layout.dropoff_stages.trim().split("|")
                             let service = schedule_data.data.result.service_name.toUpperCase().includes("ABC")
-                            DATA.push({
-                                "provider": {
-                                    "name": "ABC Transport",
-                                    "short_name": "ABC"
-                                },
-                                "trip_id": Number(trip[1]),
-                                "trip_no": Number(trip[8]),
-                                "trip_date": payload.trip_date,
-                                "departure_time":schedule_data.data.result.main_dep_time,
-                                "origin_id": Number(trip[6]),
-                                "destination_id": Number(trip[7]),
-                                "narration": dep_terminal+ " TO "+des_terminal,
-                                "fare": Number(trip[4].substring(3)),
-                                "total_seats": schedule_data.data.result.bus_layout.total_seats,
-                                "available_seats": available_seats,
-                                "blocked_seats": [],
-                                "special_seats": [],
-                                "special_seats_fare": "",
-                                "order_id": trip[0],
-                                "departure_terminal": dep_terminal,
-                                "destination_terminal": des_terminal,
-                                "vehicle": schedule_data.data.result.bus_type,
-                                "boarding_at": boarding_data[0],
-                                "departure_address": boarding_data[2],
-                                "destination_address": dropping_data[2]
-                            });
+                            if(service){
+                                DATA.push({
+                                    "provider": {
+                                        "name": "ABC Transport",
+                                        "short_name": "ABC"
+                                    },
+                                    "trip_id": Number(trip[1]),
+                                    "trip_no": Number(trip[8]),
+                                    "trip_date": payload.trip_date,
+                                    "departure_time":schedule_data.data.result.main_dep_time,
+                                    "origin_id": Number(trip[6]),
+                                    "destination_id": Number(trip[7]),
+                                    "narration": dep_terminal+ " TO "+des_terminal,
+                                    "fare": Number(trip[4].substring(3)),
+                                    "total_seats": schedule_data.data.result.bus_layout.total_seats,
+                                    "available_seats": available_seats,
+                                    "blocked_seats": [],
+                                    "special_seats": [],
+                                    "special_seats_fare": "",
+                                    "order_id": trip[0],
+                                    "departure_terminal": dep_terminal,
+                                    "destination_terminal": des_terminal,
+                                    "vehicle": schedule_data.data.result.bus_type,
+                                    "boarding_at": boarding_data[0],
+                                    "departure_address": boarding_data[2],
+                                    "destination_address": dropping_data[2]
+                                });
+                            }
                         })
                         return {
                             error: false,
