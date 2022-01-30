@@ -220,6 +220,7 @@ module.exports = fp(async function (fastify, opts) {
                             });
                         })
                         let DATA = [];
+                        let isData = false;
                         TRIP_DATA.forEach(async(trip) => {
                             const schedule_data = await axios({
                                 method: 'GET',
@@ -251,6 +252,9 @@ module.exports = fp(async function (fastify, opts) {
                             let boarding_data = schedule_data.data.result.bus_layout.boarding_stages.trim().split("|")
                             let dropping_data = schedule_data.data.result.bus_layout.dropoff_stages.trim().split("|")
                             if(schedule_data.data.result.service_name == "ABC TRANSPORT"){
+                                if(isData && isData == false){
+                                    isData = true;
+                                }
                                 DATA.push({
                                     "provider": {
                                         "name": "ABC Transport",
@@ -279,7 +283,7 @@ module.exports = fp(async function (fastify, opts) {
                                 });
                             }
                         })
-                        if (DATA[0]) {
+                        if (isData) {
                             return {
                                 error: false,
                                 message: "successful",
