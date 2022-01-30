@@ -134,7 +134,6 @@ module.exports = fp(async function (fastify, opts) {
         let destination_state = payload.destination_state
         let departure_state_terminals = ABC_STATES[departure_state]
         let destination_state_terminals = ABC_STATES[destination_state]
-        return destination_state_terminals
 
         if(destination_state_terminals.length > 0 && departure_state_terminals.length > 0){
 
@@ -159,6 +158,8 @@ module.exports = fp(async function (fastify, opts) {
                     }
                 }
             })
+
+            return (DEPARTURE_STATE, DESTINATION_STATE)
             
             if(DEPARTURE_STATE.length > 0 && DESTINATION_STATE.length > 0){
                 const GET_CITY_PAIRS = await axios.get(api+`city_pairs.json`, {
