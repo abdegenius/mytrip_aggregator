@@ -50,7 +50,8 @@ module.exports = fp(async function (fastify, opts) {
                 DATA.push({
                     "provider": {
                         "name": "BMS Agent",
-                        "short_name": "BMS"
+                        "short_name": "BMS",
+                        "logo": "https://access.mytrip.ng/providers/bms.jpg"
                     },
                     "trip_id": Number(data.schedule_id),
                     "trip_no": "",

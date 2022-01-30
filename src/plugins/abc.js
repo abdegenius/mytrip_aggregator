@@ -254,7 +254,8 @@ module.exports = fp(async function (fastify, opts) {
                                 DATA.push({
                                     "provider": {
                                         "name": "ABC Transport",
-                                        "short_name": "ABC"
+                                        "short_name": "ABC",
+                                        "logo": "https://access.mytrip.ng/providers/abc.jpg"
                                     },
                                     "trip_id": Number(trip[1]),
                                     "trip_no": Number(trip[8]),

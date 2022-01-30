@@ -65,7 +65,8 @@ module.exports = fp(async function (fastify, opts) {
                             DATA.push({
                                 "provider": {
                                     "name": "Peace Mass Transit",
-                                    "short_name": "PMT"
+                                    "short_name": "PMT",
+                                    "logo": "https://access.mytrip.ng/providers/pmt.jpg"
                                 },
                                 "trip_id": trip.id,
                                 "trip_no": trip.code,
