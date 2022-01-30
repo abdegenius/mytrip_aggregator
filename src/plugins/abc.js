@@ -363,6 +363,12 @@ module.exports = fp(async function (fastify, opts) {
         }
     })
     try{
+        return {
+            error: true,
+            message: "cannot complete booking xx",
+            info: Date.now(),
+            data: []
+        };
         const GET_BOOKING = await axios.post(api+`tentative_booking/${trip_id}.json?api_key=`+key, 
         {
             "book_ticket": {
@@ -434,7 +440,7 @@ module.exports = fp(async function (fastify, opts) {
             else{
                 return {
                     error: true,
-                    message: "cannot complete booking1",
+                    message: "cannot complete booking",
                     info: COMPLETE_BOOKING.data.response.message,
                     data: []
                 };
@@ -443,7 +449,7 @@ module.exports = fp(async function (fastify, opts) {
         else{
             return {
                 error: true,
-                message: "cannot complete booking2",
+                message: "cannot complete booking",
                 info: GET_BOOKING.data.response.message,
                 data: []
             };
