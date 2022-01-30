@@ -220,8 +220,8 @@ module.exports = fp(async function (fastify, opts) {
                             });
                         })
                         let DATA = [];
-                        TRIP_DATA.forEach((trip) => {
-                            const schedule_data = axios({
+                        TRIP_DATA.forEach(async(trip) => {
+                            const schedule_data = await axios({
                                 method: 'GET',
                                 url: api+`ui_schedule/${trip[1]}.json`,
                                     headers: {
@@ -251,7 +251,6 @@ module.exports = fp(async function (fastify, opts) {
                             let dropping_data = schedule_data.data.result.bus_layout.dropoff_stages.trim().split("|")
                             let service = schedule_data.data.result.service_name.toUpperCase().includes("ABC")
                             DATA.push({
-                                "service": service,
                                 "provider": {
                                     "name": "ABC Transport",
                                     "short_name": "ABC"
