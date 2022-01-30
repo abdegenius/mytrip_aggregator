@@ -249,7 +249,7 @@ module.exports = fp(async function (fastify, opts) {
                             })
                             let boarding_data = schedule_data.data.result.bus_layout.boarding_stages.trim().split("|")
                             let dropping_data = schedule_data.data.result.bus_layout.dropoff_stages.trim().split("|")
-                            if(schedule_data.data.result.service_name.includes("ABC TRANSPORT")){
+                            if(schedule_data.data.result.service_name.toUpperCase().includes("ABC")){
                                 DATA.push({
                                     "provider": {
                                         "name": "ABC Transport",
