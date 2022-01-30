@@ -249,7 +249,7 @@ module.exports = fp(async function (fastify, opts) {
                             })
                             let boarding_data = schedule_data.data.result.bus_layout.boarding_stages.trim().split("|")
                             let dropping_data = schedule_data.data.result.bus_layout.dropoff_stages.trim().split("|")
-                            if(schedule_data.data.result.service_name == "ABC TRANSPORT"){
+                            // if(schedule_data.data.result.service_name == "ABC TRANSPORT"){
                                 DATA.push({
                                     "provider": {
                                         "name": "ABC Transport",
@@ -276,7 +276,7 @@ module.exports = fp(async function (fastify, opts) {
                                     "departure_address": boarding_data[2],
                                     "destination_address": dropping_data[2]
                                 });
-                            }
+                            // }
                         })
                         return {
                             error: false,
