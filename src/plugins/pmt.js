@@ -263,7 +263,7 @@ module.exports = fp(async function (fastify, opts) {
                     catch(error){
                         return {
                             error: true,
-                            message: "failed",
+                            message: "failed ------",
                             info: error.message,
                             data: []
                         };
@@ -272,7 +272,7 @@ module.exports = fp(async function (fastify, opts) {
                 else{
                     return {
                         error: true,
-                        message: "failed",
+                        message: "failed xxxxxxxxxxxx",
                         info: "Invalid/empty token provided.",
                         data: []
                     };
@@ -281,7 +281,7 @@ module.exports = fp(async function (fastify, opts) {
             else{
                 return {
                     error: true,
-                    message: "failed",
+                    message: "failed 00000000000",
                     info: "Unable to login to proprietory provider.",
                     data: []
                 };
@@ -290,7 +290,7 @@ module.exports = fp(async function (fastify, opts) {
         else{
             return {
                 error: true,
-                message: "failed",
+                message: "failed eeeeeeeeeee",
                 info: "Cannot complete request, failed to save passenger details.",
                 data: []
             };
@@ -299,7 +299,7 @@ module.exports = fp(async function (fastify, opts) {
     catch(error){
         return {
             error: true,
-            message: "failed",
+            message: "failed 22222222",
             info: error.message,
             data: []
         };
