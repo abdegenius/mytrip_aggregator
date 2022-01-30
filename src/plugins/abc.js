@@ -278,22 +278,22 @@ module.exports = fp(async function (fastify, opts) {
                                 });
                             }
                         })
-                        // if(DATA.length > 0){
+                        if(DATA.length > 0){
                             return {
                                 error: false,
                                 message: "successful",
                                 info: "Data Available",
                                 data: DATA
                             }
-                        // }
-                        // else{
-                        //     return {
-                        //         error: true,
-                        //         message: "FAILED: No trips found",
-                        //         info: "No trips found",
-                        //         data: []
-                        //     };
-                        // }
+                        }
+                        else{
+                            return {
+                                error: true,
+                                message: "FAILED: No trips found",
+                                info: "No trips found",
+                                data: []
+                            };
+                        }
                     }
                     else{
                         return {
