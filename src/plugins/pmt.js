@@ -100,7 +100,7 @@ module.exports = fp(async function (fastify, opts) {
                 else{
                     return {
                         error: true,
-                        message: "failed",
+                        message: "FAILED: No trips found",
                         info: "No trips found",
                         data: []
                     };
@@ -109,7 +109,7 @@ module.exports = fp(async function (fastify, opts) {
             else{
                 return {
                     error: true,
-                    message: "failed",
+                    message: "FAILED: Departure or Destination States does not belong to our route",
                     info: "Departure or Destination States does not belong to our route",
                     data: []
                 };
@@ -118,8 +118,8 @@ module.exports = fp(async function (fastify, opts) {
         else{
             return {
                 error: true,
-                message: "failed",
-                info: "An error occured, cannot resolve request.",
+                message: "FAILED: An error occurred, cannot resolve request.",
+                info: "An error occurred, cannot resolve request.",
                 data: []
             };
         }
@@ -127,7 +127,7 @@ module.exports = fp(async function (fastify, opts) {
     catch(error){
         return {
             error: true,
-            message: "failed",
+            message: "FAILED: "+error.message,
             info: error.message,
             data: []
         };
