@@ -212,8 +212,8 @@ module.exports = fp(async function (fastify, opts) {
                                 }
                             }
                         );
-                        TRIPS_EDIT.data.forEach(trip => {
-                            trip.forEach((data,index) => {
+                        TRIPS_EDIT.forEach(trip => {
+                            trip.data.forEach((data,index) => {
                                 if(index > 0){
                                     TRIP_DATA.push(data)
                                 }
