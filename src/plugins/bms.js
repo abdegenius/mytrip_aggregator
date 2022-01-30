@@ -49,8 +49,8 @@ module.exports = fp(async function (fastify, opts) {
                 let destination_terminal = destination_terminal_data[0].trim()
                 DATA.push({
                     "provider": {
-                        "name": "BMS Agent",
-                        "short_name": "BMS",
+                        "name": data.name,
+                        "short_name": data.short_name,
                         "logo": data.logo
                     },
                     "trip_id": Number(data.schedule_id),
