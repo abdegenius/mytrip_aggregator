@@ -279,7 +279,8 @@ module.exports = fp(async function (fastify, opts) {
                                 });
                             }
                         })
-                        return DATA[0]
+                        const countData = DATA.filter(item => item).length;
+                        return countData
                         if (typeof DATA !== 'undefined' && DATA.length > 0) {
                             return {
                                 error: false,
