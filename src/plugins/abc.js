@@ -279,7 +279,7 @@ module.exports = fp(async function (fastify, opts) {
                                 });
                         })
                         let NEW_DATA = []
-                        DATA.filter(data => {
+                        DATA[0].filter(data => {
                             if(data.service){
                                 NEW_DATA.push(data)
                             }
