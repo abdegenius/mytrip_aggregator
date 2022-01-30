@@ -162,12 +162,6 @@ module.exports = fp(async function (fastify, opts) {
             }
         })
         const PASSENGERS = SAVE_PASSENGERS.data
-        return {
-            error: true,
-            message: PASSENGERS,
-            info: "Cannot complete request, failed to save passenger details.",
-            data: []
-        };
         if(PASSENGERS.success == true){
             const LOGIN = await axios.post(api+`/erp/staff/login`, {
                 "email": email,
@@ -268,7 +262,7 @@ module.exports = fp(async function (fastify, opts) {
                     catch(error){
                         return {
                             error: true,
-                            message: "failed ------",
+                            message: "FAILED: ".error.message,
                             info: error.message,
                             data: []
                         };
@@ -286,7 +280,7 @@ module.exports = fp(async function (fastify, opts) {
             else{
                 return {
                     error: true,
-                    message: "failed 00000000000",
+                    message: "FAILED: Unable to login to proprietory provider.",
                     info: "Unable to login to proprietory provider.",
                     data: []
                 };
@@ -295,7 +289,7 @@ module.exports = fp(async function (fastify, opts) {
         else{
             return {
                 error: true,
-                message: "failed eeeeeeeeeee",
+                message: "FAILED: Cannot complete request, failed to save passenger details.",
                 info: "Cannot complete request, failed to save passenger details.",
                 data: []
             };
@@ -304,7 +298,7 @@ module.exports = fp(async function (fastify, opts) {
     catch(error){
         return {
             error: true,
-            message: "failed 22222222",
+            message: "FAILED: "+error.message,
             info: error.message,
             data: []
         };
