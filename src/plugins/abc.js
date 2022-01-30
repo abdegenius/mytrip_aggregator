@@ -279,7 +279,7 @@ module.exports = fp(async function (fastify, opts) {
                                 });
                             }
                         })
-                        const countData = DATA.filter(item => item).length;
+                        const countData = DATA.filter(item => item.trip_id != '').length;
                         return countData
                         if (typeof DATA !== 'undefined' && DATA.length > 0) {
                             return {
