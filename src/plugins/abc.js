@@ -279,7 +279,7 @@ module.exports = fp(async function (fastify, opts) {
                                 });
                             }
                         })
-                        if(DATA){
+                        if(DATA && DATA.length > 0){
                             return {
                                 error: false,
                                 message: "successful",
@@ -287,11 +287,13 @@ module.exports = fp(async function (fastify, opts) {
                                 data: DATA
                             }
                         }
-                        return {
-                            error: true,
-                            message: "FAILED: No trips found",
-                            info: "No trips found",
-                            data: []
+                        else{
+                            return {
+                                error: true,
+                                message: "FAILED: No trips found",
+                                info: "No trips found",
+                                data: []
+                            }
                         }
                     }
                     else{
