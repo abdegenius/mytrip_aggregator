@@ -326,7 +326,6 @@ module.exports = fp(async function (fastify, opts) {
 
 
   fastify.decorate('ABCBookTrip', async function (payload) {
-      return "REACHED";
     let customer = [];
     let trip_id = Number(payload.trip_id)
     let seats = payload.seat_numbers.trim().split(",")
@@ -435,7 +434,7 @@ module.exports = fp(async function (fastify, opts) {
             else{
                 return {
                     error: true,
-                    message: "cannot complete booking",
+                    message: "cannot complete booking1",
                     info: COMPLETE_BOOKING.data.response.message,
                     data: []
                 };
@@ -444,7 +443,7 @@ module.exports = fp(async function (fastify, opts) {
         else{
             return {
                 error: true,
-                message: "cannot complete booking",
+                message: "cannot complete booking2",
                 info: GET_BOOKING.data.response.message,
                 data: []
             };
