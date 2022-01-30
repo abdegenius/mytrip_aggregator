@@ -251,6 +251,7 @@ module.exports = fp(async function (fastify, opts) {
                             let dropping_data = schedule_data.data.result.bus_layout.dropoff_stages.trim().split("|")
                             // if(schedule_data.data.result.service_name == "ABC TRANSPORT"){
                                 DATA.push({
+                                    "SERVICE_NAME": schedule_data.data.result.service_name,
                                     "provider": {
                                         "name": "ABC Transport",
                                         "short_name": "ABC"
