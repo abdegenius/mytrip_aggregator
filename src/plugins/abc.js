@@ -221,8 +221,8 @@ module.exports = fp(async function (fastify, opts) {
                         })
                         let DATA = [];
                         let isData = false;
-                        TRIP_DATA.forEach(async(trip) => {
-                            const schedule_data = await axios({
+                        TRIP_DATA.forEach((trip) => {
+                            const schedule_data = axios({
                                 method: 'GET',
                                 url: api+`ui_schedule/${trip[1]}.json`,
                                     headers: {
