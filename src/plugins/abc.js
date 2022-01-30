@@ -277,7 +277,6 @@ module.exports = fp(async function (fastify, opts) {
                                     "departure_address": boarding_data[2],
                                     "destination_address": dropping_data[2]
                                 });
-                            }
                         })
                         return {
                             error: false,
