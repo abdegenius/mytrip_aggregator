@@ -428,7 +428,7 @@ module.exports = fp(async function (fastify, opts) {
                     data: [
                         {
                             "order_status": "confirmed",
-                            "order_id": response.operator_pnr,
+                            "order_id": response.ticket_number,
                             "order_name": response.passenger_details[0].name,
                             "order_email": response.passenger_details[0].email,
                             "phone_number": response.passenger_details[0].mobile,
@@ -440,7 +440,7 @@ module.exports = fp(async function (fastify, opts) {
                             "order_total_seat": response.no_of_seats,
                             "order_seats": payload.seat_numbers,
                             "amount_per_seat": parseFloat(response.total_fare)/parseFloat(response.no_of_seats),
-                            "order_number": response.ticket_number,
+                            "order_number": response.operator_pnr,
                             "vehicle_no": response.bus_type,
                             "narration": response.origin.toUpperCase() + " TO " + response.destination.toUpperCase(),
                             "departure_time": payload.departure_time,
