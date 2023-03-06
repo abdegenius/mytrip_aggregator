@@ -12,11 +12,12 @@ module.exports = async function (fastify, opts) {
             "destination_state": destination_state,
             "trip_date": trip_date
         }
-        const abc_data = await fastify.ABCCheckTrips(payload);
+        // const abc_data = await fastify.ABCCheckTrips(payload);
         // const guo_data = await fastify.GUOCheckTrips(payload);
         // const pmt_data = await fastify.PMTCheckTrips(payload);
         reply.code(200).type('application/json').send({
-          "GUO":(guo_data==undefined ? [] : guo_data),
+          payload: payload
+          // "GUO":(guo_data==undefined ? [] : guo_data),
           // "ABC":(abc_data==undefined ? [] : abc_data),
           // "PMT":(pmt_data==undefined ? [] : pmt_data)
         })
