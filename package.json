@@ -2,7 +2,7 @@
   "name": "MyTrip",
   "version": "1.0",
   "description": "Trip aggregator",
-  "main": "server.js",
+  "main": "run.js",
   "scripts": {
    
     "start": "node run.js",
