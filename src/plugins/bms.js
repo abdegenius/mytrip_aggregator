@@ -2,7 +2,7 @@
 const moment = require('moment')
 const fp = require('fastify-plugin')
 const axios = require("axios")
-let api = `https://bmsapi.mytrip.ng/api/v1/`
+let api = `http://bmsapi.mytrip.ng/api/v1/`
 module.exports = fp(async function (fastify, opts) {
   fastify.decorate('BMSCheckTrips', async function (payload) {
     try{
