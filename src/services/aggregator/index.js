@@ -86,7 +86,7 @@ module.exports = async function (fastify, opts) {
     }
   });
 
-  fastify.post("/test/check_trips", async function (request, reply) {
+  fastify.post("/aggregator/test/check_trips", async function (request, reply) {
     try {
       const { departure_state, destination_state, trip_date } = request.body;
       const payload = {
@@ -110,7 +110,7 @@ module.exports = async function (fastify, opts) {
     }
   });
 
-  fastify.post("/test/book_trip", async function (request, reply) {
+  fastify.post("/aggregator/test/book_trip", async function (request, reply) {
     try {
       const {
         seat_numbers,
@@ -154,24 +154,4 @@ module.exports = async function (fastify, opts) {
     }
   });
 
-  fastify.post(
-    "/test/guo/lock_status",
-    async function (request, reply) {
-      try {
-        const { trip_id, order_id, destination_id, seat_number, type } =
-          request.body;
-        const payload = {
-          trip_id: trip_id,
-          locked_by: order_id,
-          destination_id: destination_id,
-          seat_number: seat_number,
-          type: type,
-        };
-        const guo_data = await fastify.TestGUOLockStatus(payload);
-        reply.code(200).type("application/json").send(guo_data);
-      } catch (error) {
-        reply.code(200).type("application/json").send(error);
-      }
-    }
-  );
 };
