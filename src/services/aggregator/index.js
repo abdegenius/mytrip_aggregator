@@ -86,7 +86,7 @@ module.exports = async function (fastify, opts) {
     }
   });
 
-  fastify.post("/aggregator/test/check_trips", async function (request, reply) {
+  fastify.post("/test/check_trips", async function (request, reply) {
     try {
       const { departure_state, destination_state, trip_date } = request.body;
       const payload = {
@@ -110,7 +110,7 @@ module.exports = async function (fastify, opts) {
     }
   });
 
-  fastify.post("/aggregator/test/book_trip", async function (request, reply) {
+  fastify.post("/test/book_trip", async function (request, reply) {
     try {
       const {
         seat_numbers,
@@ -155,7 +155,7 @@ module.exports = async function (fastify, opts) {
   });
 
   fastify.post(
-    "/aggregator/test/guo/lock_status",
+    "/test/guo/lock_status",
     async function (request, reply) {
       try {
         const { trip_id, order_id, destination_id, seat_number, type } =
