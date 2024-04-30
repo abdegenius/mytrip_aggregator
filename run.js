@@ -118,7 +118,7 @@ function run (args, cb) {
   if (opts.address) {
     fastify.listen(opts.port, opts.address, wrap)
   } else if (isDocker()) {
-    fastify.listen(opts.port, '0.0.0.0', wrap)
+    fastify.listen(opts.port, '127.0.0.1', wrap)
   } else {
     fastify.listen(opts.port, wrap)
   }
